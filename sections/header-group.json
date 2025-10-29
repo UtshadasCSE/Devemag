@@ -24,7 +24,7 @@
         "item_6Ycmkw": {
           "type": "item",
           "settings": {
-            "message": "Free shipping for all orders from $60+",
+            "message": "1 Day delivery in Dhaka",
             "message_link": ""
           }
         }
@@ -41,7 +41,7 @@
         "color_scheme": "dark",
         "show_announcement": true,
         "homepage_only": true,
-        "show_close": true,
+        "show_close": false,
         "show_divider": false,
         "show_nav": true,
         "autorotate": true,
