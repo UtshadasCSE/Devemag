@@ -15,6 +15,7 @@
         "1621243260e1af0c20-0": {
           "type": "slider_item",
           "settings": {
+            "background": "shopify://shop_images/Untitled_design_76.png",
             "content_in_container": false,
             "content_position": "left middle",
             "text_alignment": "left",
@@ -25,6 +26,7 @@
             "description": "",
             "image_link": "",
             "button_text": "Shop Now",
+            "button_link": "",
             "button_style": "sf__btn-secondary",
             "button_size": "",
             "second_button_text": "",
@@ -34,7 +36,8 @@
             "show_footer": true,
             "footer_alignment": "end",
             "footer_text": "The ReCotton Tee",
-            "footer_button": "Shop Now"
+            "footer_button": "Shop Now",
+            "footer_link": ""
           }
         },
         "1621243260e1af0c20-1": {
@@ -50,6 +53,7 @@
             "description": "",
             "image_link": "",
             "button_text": "Shop Now",
+            "button_link": "",
             "button_style": "sf__btn-secondary",
             "button_size": "",
             "second_button_text": "",
@@ -59,7 +63,8 @@
             "show_footer": true,
             "footer_alignment": "end",
             "footer_text": "The ReCotton Tee",
-            "footer_button": "Shop Now"
+            "footer_button": "Shop Now",
+            "footer_link": ""
           }
         },
         "1621243260e1af0c20-2": {
@@ -75,6 +80,7 @@
             "description": "",
             "image_link": "",
             "button_text": "Shop Now",
+            "button_link": "",
             "button_style": "sf__btn-secondary",
             "button_size": "",
             "second_button_text": "",
@@ -84,7 +90,8 @@
             "show_footer": true,
             "footer_alignment": "end",
             "footer_text": "The ReCotton Tee",
-            "footer_button": "Shop Now"
+            "footer_button": "Shop Now",
+            "footer_link": ""
           }
         }
       },
@@ -270,6 +277,7 @@
             "content_alignment": "center",
             "text_size": "medium",
             "text_color": "black",
+            "link": "",
             "title": "The ReLeather Beige<br> Tennis Shoe",
             "subtitle": "New collection",
             "description": "",
@@ -303,6 +311,7 @@
         "color_scheme": "",
         "content_color_scheme": "",
         "enable_parallax": false,
+        "parallax_direction": "vertical",
         "gap": 0,
         "gap_mobile": 0,
         "use_scroll_mobile": false,
@@ -373,7 +382,7 @@
         "header_alignment": "center",
         "container": "container-fluid",
         "color_scheme": "",
-        "image_aspect_ratio": "3\/4",
+        "image_aspect_ratio": "3/4",
         "use_scroll_mobile": true,
         "padding_top": 100,
         "padding_bottom": 100,
@@ -467,25 +476,28 @@
         "collection_Yy3bMf": {
           "type": "collection",
           "settings": {
+            "collection": "",
             "heading": "Sweaters & Cardigans",
             "heading_size": "h4",
-            "text": "<p>This snuggly soft Cloud Relaxed Cardigan serves a relaxed fit, with saddle shoulders—where the armhole seams curve towards the neckline so that the sleeve seamlessly hugs your shoulder<\/p>"
+            "text": "<p>This snuggly soft Cloud Relaxed Cardigan serves a relaxed fit, with saddle shoulders—where the armhole seams curve towards the neckline so that the sleeve seamlessly hugs your shoulder</p>"
           }
         },
         "collection_EhyPJ6": {
           "type": "collection",
           "settings": {
+            "collection": "",
             "heading": "The Bomber Jackets",
             "heading_size": "h4",
-            "text": "<p>This snuggly soft Cloud Relaxed Cardigan serves a relaxed fit, with saddle shoulders—where the armhole seams curve towards the neckline so that the sleeve seamlessly hugs your shoulder<\/p>"
+            "text": "<p>This snuggly soft Cloud Relaxed Cardigan serves a relaxed fit, with saddle shoulders—where the armhole seams curve towards the neckline so that the sleeve seamlessly hugs your shoulder</p>"
           }
         },
         "collection_PEi4at": {
           "type": "collection",
           "settings": {
+            "collection": "",
             "heading": "Corduroy Shirts",
             "heading_size": "h4",
-            "text": "<p>This snuggly soft Cloud Relaxed Cardigan serves a relaxed fit, with saddle shoulders—where the armhole seams curve towards the neckline so that the sleeve seamlessly hugs your shoulder<\/p>"
+            "text": "<p>This snuggly soft Cloud Relaxed Cardigan serves a relaxed fit, with saddle shoulders—where the armhole seams curve towards the neckline so that the sleeve seamlessly hugs your shoulder</p>"
           }
         }
       },
@@ -503,7 +515,7 @@
         "subheading": "Hot This Week",
         "description": "",
         "image_position": "right",
-        "image_ratio": "1\/1",
+        "image_ratio": "1/1",
         "prefix_header": "ordinal_number",
         "trigger_behavior": "hover",
         "autoplay": true,
@@ -607,7 +619,7 @@
         "html_gbT3c7": {
           "type": "html",
           "settings": {
-            "code": "<div class=\"m-divider\"><\/div>",
+            "code": "<div class=\"m-divider\"></div>",
             "width": "100%",
             "block_custom_class": "",
             "animations": "inherit"
@@ -630,6 +642,7 @@
         "color_scheme": "",
         "content_color_scheme": "",
         "enable_parallax": false,
+        "parallax_direction": "vertical",
         "gap": 30,
         "gap_mobile": 16,
         "use_scroll_mobile": false,
@@ -646,13 +659,14 @@
           "settings": {
             "title": "The Coastal Edition",
             "subheading": "",
-            "text": "<p>Our new cozy collection is made with environmentally friendly materials and<br\/> simple to care for so you can stay cozy wherever.<\/p>",
+            "text": "<p>Our new cozy collection is made with environmentally friendly materials and<br/> simple to care for so you can stay cozy wherever.</p>",
             "width": "100%",
             "alignment": "center",
             "align_text": "center",
             "text_size": "large",
             "text_color": "inherit",
             "button_label": "Shop Now",
+            "button_link": "",
             "button_style": "m-button--secondary",
             "button_size": "",
             "block_custom_class": "",
@@ -676,6 +690,7 @@
         "color_scheme": "",
         "content_color_scheme": "",
         "enable_parallax": false,
+        "parallax_direction": "vertical",
         "gap": 0,
         "gap_mobile": 16,
         "use_scroll_mobile": false,
@@ -741,7 +756,7 @@
         "lookbook_hDUCNi"
       ],
       "custom_css": [
-        ".m-custom-content__wrapper, .m-block-first {position: relative; z-index: 1;}"
+        ".m-custom-content__wrapper,.m-block-first {position: relative; z-index: 1;}"
       ],
       "settings": {
         "heading": "",
@@ -753,6 +768,7 @@
         "color_scheme": "",
         "content_color_scheme": "",
         "enable_parallax": false,
+        "parallax_direction": "vertical",
         "gap": 0,
         "gap_mobile": 0,
         "use_scroll_mobile": false,
@@ -769,13 +785,14 @@
           "settings": {
             "title": "Living out every single day and <br> be brave to show off your own true colors",
             "subheading": "Minimog Store",
-            "text": "<p>Our new cozy collection is made with environmentally friendly materials and <br\/> simple to care for so you can stay cozy wherever .<\/p>",
+            "text": "<p>Our new cozy collection is made with environmentally friendly materials and <br/> simple to care for so you can stay cozy wherever .</p>",
             "width": "100%",
             "alignment": "center",
             "align_text": "center",
             "text_size": "medium",
             "text_color": "inherit",
             "button_label": "Shop Collection",
+            "button_link": "",
             "button_style": "m-button--link",
             "button_size": "",
             "block_custom_class": "",
@@ -799,6 +816,7 @@
         "color_scheme": "",
         "content_color_scheme": "",
         "enable_parallax": false,
+        "parallax_direction": "vertical",
         "gap": 30,
         "gap_mobile": 16,
         "use_scroll_mobile": false,
@@ -926,13 +944,14 @@
           "settings": {
             "title": "Layer up with <br>\npieces designed",
             "subheading": "Mix & Match",
-            "text": "<p>Here is your chance to upgrade your wardrobe <br\/>with a variation of styles and fits that are both.<\/p>",
+            "text": "<p>Here is your chance to upgrade your wardrobe <br/>with a variation of styles and fits that are both.</p>",
             "width": "50%",
             "alignment": "center",
             "align_text": "center",
             "text_size": "large",
             "text_color": "inherit",
             "button_label": "Shop Mix & Match",
+            "button_link": "",
             "button_style": "m-button--secondary",
             "button_size": "",
             "block_custom_class": "",
@@ -960,6 +979,7 @@
         "color_scheme": "",
         "content_color_scheme": "",
         "enable_parallax": false,
+        "parallax_direction": "vertical",
         "gap": 0,
         "gap_mobile": 48,
         "use_scroll_mobile": false,
@@ -975,60 +995,66 @@
           "type": "testimonial",
           "settings": {
             "title": "Love it so much",
-            "description": "<p>Was I in Hawaii?! No. Did I feel like I was in Hawaii?! No, because it’s snowing outside. But, would I wear this in Hawaii ❤️<\/p>",
-            "footer": "<p>Jared S.<\/p>",
+            "description": "<p>Was I in Hawaii?! No. Did I feel like I was in Hawaii?! No, because it’s snowing outside. But, would I wear this in Hawaii ❤️</p>",
+            "footer": "<p>Jared S.</p>",
             "image_text": "",
-            "image_link": ""
+            "image_link": "",
+            "product": ""
           }
         },
         "testimonial_BaC37W": {
           "type": "testimonial",
           "settings": {
             "title": "Love it so much",
-            "description": "<p>Always getting compliments from family, friends, and strangers. 🤗 🙌<\/p>",
-            "footer": "<p>Alyssa A.<\/p>",
+            "description": "<p>Always getting compliments from family, friends, and strangers. 🤗 🙌</p>",
+            "footer": "<p>Alyssa A.</p>",
             "image_text": "",
-            "image_link": ""
+            "image_link": "",
+            "product": ""
           }
         },
         "testimonial_X8q9A4": {
           "type": "testimonial",
           "settings": {
             "title": "Love it so much",
-            "description": "<p>Hands down one of the best shirts I’ve ever owned.  Fits great, feels amazing, seems to stay cool and is somewhat water resistant. <\/p>",
-            "footer": "<p>Ben B.<\/p>",
+            "description": "<p>Hands down one of the best shirts I’ve ever owned.  Fits great, feels amazing, seems to stay cool and is somewhat water resistant. </p>",
+            "footer": "<p>Ben B.</p>",
             "image_text": "",
-            "image_link": ""
+            "image_link": "",
+            "product": ""
           }
         },
         "testimonial_ef4Etp": {
           "type": "testimonial",
           "settings": {
             "title": "Love it so much",
-            "description": "<p>Was I in Hawaii?! No. Did I feel like I was in Hawaii?! No, because it’s snowing outside. But, would I wear this in Hawaii ❤️<\/p>",
-            "footer": "<p>Dean D. US<\/p>",
+            "description": "<p>Was I in Hawaii?! No. Did I feel like I was in Hawaii?! No, because it’s snowing outside. But, would I wear this in Hawaii ❤️</p>",
+            "footer": "<p>Dean D. US</p>",
             "image_text": "",
-            "image_link": ""
+            "image_link": "",
+            "product": ""
           }
         },
         "testimonial_bUi88K": {
           "type": "testimonial",
           "settings": {
             "title": "Love it so much",
-            "description": "<p>Always getting compliments from family, friends, and strangers. 🤗 🙌<\/p>",
-            "footer": "<p>John D.<\/p>",
+            "description": "<p>Always getting compliments from family, friends, and strangers. 🤗 🙌</p>",
+            "footer": "<p>John D.</p>",
             "image_text": "",
-            "image_link": ""
+            "image_link": "",
+            "product": ""
           }
         },
         "testimonial_NMt6Em": {
           "type": "testimonial",
           "settings": {
             "title": "Love it so much",
-            "description": "<p>Hands down one of the best shirts I’ve ever owned.  Fits great, feels amazing, seems to stay cool and is somewhat water resistant. <\/p>",
-            "footer": "<p>Dean J.<\/p>",
+            "description": "<p>Hands down one of the best shirts I’ve ever owned.  Fits great, feels amazing, seems to stay cool and is somewhat water resistant. </p>",
+            "footer": "<p>Dean J.</p>",
             "image_text": "",
-            "image_link": ""
+            "image_link": "",
+            "product": ""
           }
         }
       },
@@ -1077,7 +1103,7 @@
         "heading": "Follow us Instagram",
         "heading_size": "h3",
         "subheading": "",
-        "description": "Tag <span class=\"text-black\">@minimog<\/span> in your Instagram photos for a chance to be featured here.<br>\nFind more inspiration on <a href=\"#\">our Instagram.<\/a>",
+        "description": "Tag <span class=\"text-black\">@minimog</span> in your Instagram photos for a chance to be featured here.<br>\nFind more inspiration on <a href=\"#\">our Instagram.</a>",
         "header_alignment": "center",
         "container": "w-full",
         "color_scheme": "",
@@ -1087,7 +1113,7 @@
         "grid_columns": 5,
         "gap": 0,
         "mobile_gap": 0,
-        "profile": "https:\/\/www.instagram.com\/minimog.trendy\/",
+        "profile": "https://www.instagram.com/minimog.trendy/",
         "button_label": "",
         "button_style": "m-button--secondary",
         "use_scroll_mobile": true,
@@ -1104,7 +1130,7 @@
           "settings": {
             "image_by_url": "",
             "title": "Free Shipping",
-            "description": "<p>Free Shipping for orders over £130<\/p>",
+            "description": "<p>Free Shipping for orders over £130</p>",
             "link": "",
             "button_label": "",
             "button_link": "",
@@ -1117,7 +1143,7 @@
           "settings": {
             "image_by_url": "",
             "title": "Money Guarantee",
-            "description": "<p>Within 30 days for an exchange.<\/p>",
+            "description": "<p>Within 30 days for an exchange.</p>",
             "link": "",
             "button_label": "",
             "button_link": "",
@@ -1130,7 +1156,7 @@
           "settings": {
             "image_by_url": "",
             "title": "Online Support",
-            "description": "<p>24 hours a day, 7 days a week<\/p>",
+            "description": "<p>24 hours a day, 7 days a week</p>",
             "link": "",
             "button_label": "",
             "button_link": "",
@@ -1143,7 +1169,7 @@
           "settings": {
             "image_by_url": "",
             "title": "Flexible Payment",
-            "description": "<p>Pay with Multiple Credit Cards<\/p>",
+            "description": "<p>Pay with Multiple Credit Cards</p>",
             "link": "",
             "button_label": "",
             "button_link": "",
