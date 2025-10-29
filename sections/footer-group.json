@@ -41,6 +41,7 @@
         "7ebc2f78-975b-4a81-b874-103c3355a866": {
           "type": "menu",
           "settings": {
+            "menu": "main-menu",
             "title": "Quick link",
             "width": "25%",
             "order_first": false,
@@ -50,6 +51,7 @@
         "49e72833-c68f-4a7b-ab64-3ef0cae99bcb": {
           "type": "menu",
           "settings": {
+            "menu": "main-menu",
             "title": "Company",
             "width": "25%",
             "order_first": false,
@@ -84,7 +86,7 @@
         "@media (min-width: 1280px) {.m-footer--block-newsletter .m-footer--block-title {font-size: 36px; margin-bottom: 12px; } .m-footer__copyright, .m-footer--bottom-menu {font-size: 14px; }}"
       ],
       "settings": {
-        "color_scheme": "",
+        "color_scheme": "dark",
         "design": "footer-1",
         "container": "container-fluid",
         "bordered": false,
@@ -96,8 +98,8 @@
         "enable_follow_on_shop": true,
         "show_payment_icons": true,
         "payment_icons_width": 300,
-        "footer_bottom_color_scheme": "",
-        "footer_bottom_menu": "footer-bottom",
+        "footer_bottom_color_scheme": "dark",
+        "footer_bottom_menu": "",
         "show_menu_item_divider": true
       }
     },
@@ -125,7 +127,7 @@
         "block-2": {
           "type": "text",
           "settings": {
-            "text": "<p>Are you 18 years old or older?<\/p>"
+            "text": "<p>Are you 18 years old or older?</p>"
           }
         },
         "block-3": {
@@ -146,7 +148,7 @@
         "enable": false,
         "bg_blur": true,
         "decline_heading": "Come back when you're older",
-        "decline_content": "<p>Sorry, the content of this store can't be seen by a younger audience. Come back when you're older.<\/p>",
+        "decline_content": "<p>Sorry, the content of this store can't be seen by a younger audience. Come back when you're older.</p>",
         "return_button": "Oops, I entered incorrectly"
       }
     }

@@ -1,0 +1,572 @@
+{% comment %}
+  Product Slider Section with Category Filter and Full Customization
+  - Editable left content (heading, description, button)
+  - Category selection in customize panel
+  - Dynamic product display based on category
+  - Customizable colors, padding, and styling
+{% endcomment %}
+
+<div
+  class="product-slider-section"
+  style="
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.section_bg_color }};
+  "
+>
+  <div class="container">
+    <!-- Left Content -->
+    <div class="left-content">
+      <div class="heading-small">{{ section.settings.small_heading }}</div>
+      <h1>{{ section.settings.main_heading }}</h1>
+      <p class="description">{{ section.settings.description }}</p>
+      <a href="{{ section.settings.button_link }}" class="explore-btn">
+        {{ section.settings.button_label }}
+      </a>
+    </div>
+
+    <!-- Right Slider Section -->
+    <div class="slider-section">
+      <div class="slider-wrapper">
+        <div class="slider-container" id="slider">
+          {% comment %} Fetch products based on selected collection {% endcomment %}
+          {% if section.settings.collection != blank %}
+            {% assign collection = collections[section.settings.collection] %}
+            {% for product in collection.products limit: 6 %}
+              <div class="product-card">
+                <div class="product-image">
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 300 }}"
+                      alt="{{ product.title }}"
+                      loading="lazy"
+                      height="300"
+                      width="300"
+                    >
+                  {% endif %}
+                </div>
+                <div class="product-name">{{ product.title }}</div>
+                <div class="product-footer">
+                  <div class="product-price">
+                    {{ product.price | money }}
+                  </div>
+                  <a href="{{ product.url }}" class="add-btn" title="View product">↗</a>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            {% comment %} Show first 6 products if no collection selected {% endcomment %}
+            {% for product in shop.products limit: 6 %}
+              <div class="product-card">
+                <div class="product-image">
+                  {% if product.featured_image %}
+                    <img
+                      src="{{ product.featured_image | image_url: width: 300 }}"
+                      alt="{{ product.title }}"
+                      loading="lazy"
+                      height="300"
+                      width="300"
+                    >
+                  {% endif %}
+                </div>
+                <div class="product-name">{{ product.title }}</div>
+                <div class="product-footer">
+                  <div class="product-price">
+                    {{ product.price | money }}
+                  </div>
+                  <a href="{{ product.url }}" class="add-btn" title="View product">↗</a>
+                </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <div class="slider-nav">
+        <button class="nav-btn" id="prevBtn" aria-label="Previous slide">‹</button>
+        <button class="nav-btn" id="nextBtn" aria-label="Next slide">›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .product-slider-section {
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+
+  .container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+  }
+
+  .left-content {
+    flex: 0 0 300px;
+  }
+
+  .heading-small {
+    font-size: 14px;
+    color: #111;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .heading-small::before {
+    content: "";
+    width: 30px;
+    height: 1.5px;
+    background: #000;
+  }
+
+  .left-content h1 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .description {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+
+  .explore-btn {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .explore-btn:hover {
+    background: #333;
+  }
+
+  /* Slider Section */
+  .slider-section {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slider-wrapper {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .slider-container {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  .slider-container.no-transition {
+    transition: none !important;
+  }
+
+  .product-card {
+    flex: 0 0 calc((100% - 40px) / 3);
+    background: {{ section.settings.card_bg_color }};
+    border: 1px solid #eee;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    transition: all 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .product-image {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .product-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-transform: capitalize;
+    color: {{ section.settings.card_text_color }};
+  }
+
+  .product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-price {
+    font-size: 15px;
+    font-weight: 600;
+    color: {{ section.settings.card_text_color }};
+  }
+
+  .add-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: background 0.3s;
+    text-decoration: none;
+  }
+
+  .add-btn:hover {
+    background: #333;
+  }
+
+  /* Nav Arrows */
+  .slider-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .nav-btn {
+    pointer-events: all;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .nav-btn:hover {
+    background: #000;
+    color: #fff;
+  }
+
+  /* Responsive design - mobile first approach */
+  /* Mobile: 1 product, stacked layout */
+  @media (max-width: 640px) {
+    .container {
+      flex-direction: column;
+      gap: 30px;
+      padding: 0 16px;
+    }
+
+    .left-content {
+      flex: 1;
+      text-align: center;
+      width: 100%;
+    }
+
+    .heading-small {
+      justify-content: center;
+    }
+
+    .heading-small::before {
+      order: 2;
+      margin-left: 8px;
+    }
+
+    .left-content h1 {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .description {
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .explore-btn {
+      padding: 10px 24px;
+      font-size: 14px;
+    }
+
+    .slider-section {
+      width: 100%;
+      flex: 1;
+    }
+
+    .product-card {
+      flex: 0 0 100%;
+    }
+
+    .nav-btn {
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+    }
+  }
+
+  /* Tablet: 2 products */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .container {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .left-content {
+      text-align: center;
+      flex: 1;
+      width: 100%;
+    }
+
+    .heading-small {
+      justify-content: center;
+    }
+
+    .heading-small::before {
+      order: 2;
+      margin-left: 8px;
+    }
+
+    .left-content h1 {
+      font-size: 32px;
+    }
+
+    .slider-section {
+      width: 100%;
+      flex: 1;
+    }
+
+    .product-card {
+      flex: 0 0 calc((100% - 20px) / 2);
+    }
+  }
+
+  /* Desktop: 3 products, side-by-side layout */
+  @media (min-width: 1025px) {
+    .container {
+      flex-direction: row;
+    }
+
+    .left-content {
+      flex: 0 0 300px;
+      text-align: left;
+    }
+
+    .heading-small::before {
+      order: 1;
+    }
+
+    .slider-section {
+      flex: 1;
+    }
+
+    .product-card {
+      flex: 0 0 calc((100% - 40px) / 3);
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const slider = document.getElementById('slider');
+    if (!slider) return;
+
+    const slides = Array.from(slider.children);
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    if (slides.length === 0) return;
+
+    const totalRealSlides = slides.length;
+
+    // Clone all slides and append to end for infinite loop
+    slides.forEach((slide) => {
+      const clone = slide.cloneNode(true);
+      slider.appendChild(clone);
+    });
+
+    let currentIndex = 0;
+    let slideWidth = 0;
+    let isTransitioning = false;
+
+    function getVisibleSlides() {
+      const width = window.innerWidth;
+      if (width <= 640) return 1;
+      if (width <= 1024) return 2;
+      return 3;
+    }
+
+    function calculateSlideWidth() {
+      const firstSlide = slider.children[0];
+      slideWidth = firstSlide.offsetWidth + 20; // 20px gap
+    }
+
+    function updateSliderPosition(instant = false) {
+      if (instant) {
+        slider.classList.add('no-transition');
+      } else {
+        slider.classList.remove('no-transition');
+      }
+
+      slider.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+    }
+
+    function handleNext() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex++;
+      updateSliderPosition(false);
+    }
+
+    function handlePrev() {
+      if (isTransitioning) return;
+      isTransitioning = true;
+      currentIndex--;
+      updateSliderPosition(false);
+    }
+
+    function handleTransitionEnd() {
+      if (currentIndex >= totalRealSlides) {
+        currentIndex = 0;
+        updateSliderPosition(true);
+      } else if (currentIndex < 0) {
+        currentIndex = totalRealSlides - 1;
+        updateSliderPosition(true);
+      }
+      isTransitioning = false;
+    }
+
+    calculateSlideWidth();
+    updateSliderPosition(true);
+
+    prevBtn.addEventListener('click', handlePrev);
+    nextBtn.addEventListener('click', handleNext);
+    slider.addEventListener('transitionend', handleTransitionEnd);
+
+    window.addEventListener('resize', () => {
+      calculateSlideWidth();
+      slider.classList.add('no-transition');
+      updateSliderPosition(true);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Text With Slider",
+  "settings": [
+    {
+      "type": "text",
+      "id": "small_heading",
+      "label": "Subheading",
+      "default": "Our Trending Shoe"
+    },
+    {
+      "type": "text",
+      "id": "main_heading",
+      "label": "Heading",
+      "default": "Most Popular Products"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Explore"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "section_bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_text_color",
+      "label": "Card Text Color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Text With Slider",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
