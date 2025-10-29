@@ -38,7 +38,7 @@
       ],
       "settings": {
         "container": "container",
-        "color_scheme": "badge-sale",
+        "color_scheme": "dark",
         "show_announcement": true,
         "homepage_only": true,
         "show_close": true,
