@@ -55,7 +55,7 @@
           "type": "collection-list",
           "settings": {
             "heading": "Shop",
-            "container": "inherit",
+            "container": "container",
             "collection_1": "dress",
             "image_1": "shopify://shop_images/1741512262804-Strides_EID2_3-3-2.png",
             "collection_2": "men",
