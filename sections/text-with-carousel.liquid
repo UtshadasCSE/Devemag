@@ -1,40 +1,36 @@
 {% comment %}
   Product Slider Section with Category Filter and Full Customization
-  - Editable left content (heading, description, button)
-  - Category selection in customize panel
-  - Dynamic product display based on category
-  - Customizable colors, padding, and styling
+  Prefixed with `du-` for namespace isolation
 {% endcomment %}
 
 <div
-  class="product-slider-section"
+  class="du-product-slider-section"
   style="
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
     background-color: {{ section.settings.section_bg_color }};
   "
 >
-  <div class="container">
+  <div class="du-container">
     <!-- Left Content -->
-    <div class="left-content">
-      <div class="heading-small">{{ section.settings.small_heading }}</div>
+    <div class="du-left-content">
+      <div class="du-heading-small">{{ section.settings.small_heading }}</div>
       <h1>{{ section.settings.main_heading }}</h1>
-      <p class="description">{{ section.settings.description }}</p>
-      <a href="{{ section.settings.button_link }}" class="explore-btn">
+      <p class="du-description">{{ section.settings.description }}</p>
+      <a href="{{ section.settings.button_link }}" class="du-explore-btn">
         {{ section.settings.button_label }}
       </a>
     </div>
 
     <!-- Right Slider Section -->
-    <div class="slider-section">
-      <div class="slider-wrapper">
-        <div class="slider-container" id="slider">
-          {% comment %} Fetch products based on selected collection {% endcomment %}
+    <div class="du-slider-section">
+      <div class="du-slider-wrapper">
+        <div class="du-slider-container" id="du-slider">
           {% if section.settings.collection != blank %}
             {% assign collection = collections[section.settings.collection] %}
             {% for product in collection.products limit: 6 %}
-              <div class="product-card">
-                <div class="product-image">
+              <div class="du-product-card">
+                <div class="du-product-image">
                   {% if product.featured_image %}
                     <img
                       src="{{ product.featured_image | image_url: width: 300 }}"
@@ -45,20 +41,19 @@
                     >
                   {% endif %}
                 </div>
-                <div class="product-name">{{ product.title }}</div>
-                <div class="product-footer">
-                  <div class="product-price">
+                <div class="du-product-name">{{ product.title }}</div>
+                <div class="du-product-footer">
+                  <div class="du-product-price">
                     {{ product.price | money }}
                   </div>
-                  <a href="{{ product.url }}" class="add-btn" title="View product">↗</a>
+                  <a href="{{ product.url }}" class="du-add-btn" title="View product">↗</a>
                 </div>
               </div>
             {% endfor %}
           {% else %}
-            {% comment %} Show first 6 products if no collection selected {% endcomment %}
             {% for product in shop.products limit: 6 %}
-              <div class="product-card">
-                <div class="product-image">
+              <div class="du-product-card">
+                <div class="du-product-image">
                   {% if product.featured_image %}
                     <img
                       src="{{ product.featured_image | image_url: width: 300 }}"
@@ -69,12 +64,12 @@
                     >
                   {% endif %}
                 </div>
-                <div class="product-name">{{ product.title }}</div>
-                <div class="product-footer">
-                  <div class="product-price">
+                <div class="du-product-name">{{ product.title }}</div>
+                <div class="du-product-footer">
+                  <div class="du-product-price">
                     {{ product.price | money }}
                   </div>
-                  <a href="{{ product.url }}" class="add-btn" title="View product">↗</a>
+                  <a href="{{ product.url }}" class="du-add-btn" title="View product">↗</a>
                 </div>
               </div>
             {% endfor %}
@@ -83,22 +78,22 @@
       </div>
 
       <!-- Navigation Arrows -->
-      <div class="slider-nav">
-        <button class="nav-btn" id="prevBtn" aria-label="Previous slide">‹</button>
-        <button class="nav-btn" id="nextBtn" aria-label="Next slide">›</button>
+      <div class="du-slider-nav">
+        <button class="du-nav-btn" id="du-prevBtn" aria-label="Previous slide">‹</button>
+        <button class="du-nav-btn" id="du-nextBtn" aria-label="Next slide">›</button>
       </div>
     </div>
   </div>
 </div>
 
 <style>
-  .product-slider-section {
+  .du-product-slider-section {
     width: 100%;
     transition: background-color 0.3s ease;
   }
 
-  .container {
-    max-width: 1300px;
+  .du-container {
+    max-width: 1320px;
     margin: 0 auto;
     display: flex;
     gap: 40px;
@@ -107,11 +102,11 @@
     padding: 0 20px;
   }
 
-  .left-content {
+  .du-left-content {
     flex: 0 0 300px;
   }
 
-  .heading-small {
+  .du-heading-small {
     font-size: 14px;
     color: #111;
     font-weight: 500;
@@ -121,28 +116,28 @@
     gap: 8px;
   }
 
-  .heading-small::before {
+  .du-heading-small::before {
     content: "";
     width: 30px;
     height: 1.5px;
     background: #000;
   }
 
-  .left-content h1 {
+  .du-left-content h1 {
     font-size: 36px;
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 14px;
   }
 
-  .description {
+  .du-description {
     color: #666;
     font-size: 14px;
     line-height: 1.6;
     margin-bottom: 22px;
   }
 
-  .explore-btn {
+  .du-explore-btn {
     display: inline-block;
     background: #000;
     color: #fff;
@@ -156,34 +151,34 @@
     text-decoration: none;
   }
 
-  .explore-btn:hover {
+  .du-explore-btn:hover {
     background: #333;
   }
 
   /* Slider Section */
-  .slider-section {
+  .du-slider-section {
     flex: 1;
     position: relative;
     overflow: hidden;
   }
 
-  .slider-wrapper {
+  .du-slider-wrapper {
     overflow: hidden;
     width: 100%;
   }
 
-  .slider-container {
+  .du-slider-container {
     display: flex;
     gap: 20px;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
   }
 
-  .slider-container.no-transition {
+  .du-slider-container.du-no-transition {
     transition: none !important;
   }
 
-  .product-card {
+  .du-product-card {
     flex: 0 0 calc((100% - 40px) / 3);
     background: {{ section.settings.card_bg_color }};
     border: 1px solid #eee;
@@ -193,12 +188,12 @@
     transition: all 0.3s ease;
   }
 
-  .product-card:hover {
+  .du-product-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
   }
 
-  .product-image {
+  .du-product-image {
     width: 100%;
     height: 180px;
     display: flex;
@@ -207,13 +202,13 @@
     margin-bottom: 16px;
   }
 
-  .product-image img {
+  .du-product-image img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
 
-  .product-name {
+  .du-product-name {
     font-size: 15px;
     font-weight: 500;
     margin-bottom: 10px;
@@ -221,19 +216,19 @@
     color: {{ section.settings.card_text_color }};
   }
 
-  .product-footer {
+  .du-product-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .product-price {
+  .du-product-price {
     font-size: 15px;
     font-weight: 600;
     color: {{ section.settings.card_text_color }};
   }
 
-  .add-btn {
+  .du-add-btn {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -249,12 +244,12 @@
     text-decoration: none;
   }
 
-  .add-btn:hover {
+  .du-add-btn:hover {
     background: #333;
   }
 
   /* Nav Arrows */
-  .slider-nav {
+  .du-slider-nav {
     position: absolute;
     top: 50%;
     width: 100%;
@@ -264,7 +259,7 @@
     pointer-events: none;
   }
 
-  .nav-btn {
+  .du-nav-btn {
     pointer-events: all;
     width: 36px;
     height: 36px;
@@ -279,122 +274,119 @@
     transition: all 0.3s;
   }
 
-  .nav-btn:hover {
+  .du-nav-btn:hover {
     background: #000;
     color: #fff;
   }
 
-  /* Responsive design - mobile first approach */
-  /* Mobile: 1 product, stacked layout */
+  /* Responsive design */
   @media (max-width: 640px) {
-    .container {
+    .du-container {
       flex-direction: column;
       gap: 30px;
       padding: 0 16px;
     }
 
-    .left-content {
+    .du-left-content {
       flex: 1;
       text-align: center;
       width: 100%;
     }
 
-    .heading-small {
+    .du-heading-small {
       justify-content: center;
     }
 
-    .heading-small::before {
+    .du-heading-small::before {
       order: 2;
       margin-left: 8px;
     }
 
-    .left-content h1 {
+    .du-left-content h1 {
       font-size: 24px;
       margin-bottom: 12px;
     }
 
-    .description {
+    .du-description {
       font-size: 13px;
       margin-bottom: 18px;
     }
 
-    .explore-btn {
+    .du-explore-btn {
       padding: 10px 24px;
       font-size: 14px;
     }
 
-    .slider-section {
+    .du-slider-section {
       width: 100%;
       flex: 1;
     }
 
-    .product-card {
+    .du-product-card {
       flex: 0 0 100%;
     }
 
-    .nav-btn {
+    .du-nav-btn {
       width: 32px;
       height: 32px;
       font-size: 16px;
     }
   }
 
-  /* Tablet: 2 products */
   @media (min-width: 641px) and (max-width: 1024px) {
-    .container {
+    .du-container {
       flex-direction: column;
       gap: 40px;
     }
 
-    .left-content {
+    .du-left-content {
       text-align: center;
       flex: 1;
       width: 100%;
     }
 
-    .heading-small {
+    .du-heading-small {
       justify-content: center;
     }
 
-    .heading-small::before {
+    .du-heading-small::before {
       order: 2;
       margin-left: 8px;
     }
 
-    .left-content h1 {
+    .du-left-content h1 {
       font-size: 32px;
     }
 
-    .slider-section {
+    .du-slider-section {
       width: 100%;
       flex: 1;
     }
 
-    .product-card {
+    .du-product-card {
       flex: 0 0 calc((100% - 20px) / 2);
     }
   }
 
-  /* Desktop: 3 products, side-by-side layout */
   @media (min-width: 1025px) {
-    .container {
+    .du-container {
       flex-direction: row;
     }
 
-    .left-content {
+    .du-left-content {
       flex: 0 0 300px;
       text-align: left;
     }
 
-    .heading-small::before {
+    .du-heading-small::before {
       order: 1;
     }
 
-    .slider-section {
+    .du-slider-section {
       flex: 1;
     }
 
-    .product-card {
+    .du-product-card {
       flex: 0 0 calc((100% - 40px) / 3);
     }
   }
@@ -402,21 +394,20 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const slider = document.getElementById('slider');
-    if (!slider) return;
+    const duSlider = document.getElementById('du-slider');
+    if (!duSlider) return;
 
-    const slides = Array.from(slider.children);
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    const duSlides = Array.from(duSlider.children);
+    const duPrevBtn = document.getElementById('du-prevBtn');
+    const duNextBtn = document.getElementById('du-nextBtn');
 
-    if (slides.length === 0) return;
+    if (duSlides.length === 0) return;
 
-    const totalRealSlides = slides.length;
+    const totalRealSlides = duSlides.length;
 
-    // Clone all slides and append to end for infinite loop
-    slides.forEach((slide) => {
+    duSlides.forEach((slide) => {
       const clone = slide.cloneNode(true);
-      slider.appendChild(clone);
+      duSlider.appendChild(clone);
     });
 
     let currentIndex = 0;
@@ -431,18 +422,18 @@
     }
 
     function calculateSlideWidth() {
-      const firstSlide = slider.children[0];
-      slideWidth = firstSlide.offsetWidth + 20; // 20px gap
+      const firstSlide = duSlider.children[0];
+      slideWidth = firstSlide.offsetWidth + 20; // gap
     }
 
     function updateSliderPosition(instant = false) {
       if (instant) {
-        slider.classList.add('no-transition');
+        duSlider.classList.add('du-no-transition');
       } else {
-        slider.classList.remove('no-transition');
+        duSlider.classList.remove('du-no-transition');
       }
 
-      slider.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
+      duSlider.style.transform = `translateX(-${slideWidth * currentIndex}px)`;
     }
 
     function handleNext() {
@@ -473,13 +464,13 @@
     calculateSlideWidth();
     updateSliderPosition(true);
 
-    prevBtn.addEventListener('click', handlePrev);
-    nextBtn.addEventListener('click', handleNext);
-    slider.addEventListener('transitionend', handleTransitionEnd);
+    duPrevBtn.addEventListener('click', handlePrev);
+    duNextBtn.addEventListener('click', handleNext);
+    duSlider.addEventListener('transitionend', handleTransitionEnd);
 
     window.addEventListener('resize', () => {
       calculateSlideWidth();
-      slider.classList.add('no-transition');
+      duSlider.classList.add('du-no-transition');
       updateSliderPosition(true);
     });
   });

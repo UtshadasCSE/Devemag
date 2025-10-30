@@ -1,5 +1,5 @@
 {% comment %}
-  Marquee Carousel Section
+  Marquee Carousel Section (DU version)
   - Infinite smooth scrolling with multiple clones
   - Customizable padding, colors, and image sizes
   - Supports up to 12 images
@@ -7,28 +7,28 @@
 {% endcomment %}
 
 <section
-  class="marquee-section"
+  class="du-marquee-section"
   style="
-    --marquee-padding-top: {{ section.settings.padding_top }}px;
-    --marquee-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --marquee-bg-color: {{ section.settings.bg_color }};
-    --marquee-gap: {{ section.settings.image_gap }}px;
+    --du-marquee-padding-top: {{ section.settings.padding_top }}px;
+    --du-marquee-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --du-marquee-bg-color: {{ section.settings.bg_color }};
+    --du-marquee-gap: {{ section.settings.image_gap }}px;
   "
 >
-  <div class="marquee-container">
-    <div class="marquee-track" data-speed="{{ section.settings.animation_speed }}">
+  <div class="du-marquee-container">
+    <div class="du-marquee-track" data-speed="{{ section.settings.animation_speed }}">
       {% comment %} Clone images 4 times for seamless infinite loop {% endcomment %}
       {% for clone in (1..4) %}
         {% for block in section.blocks %}
           {% if block.type == 'image' and block.settings.image %}
-            <div class="marquee-item" data-size="{{ section.settings.image_size }}">
+            <div class="du-marquee-item" data-size="{{ section.settings.image_size }}">
               <img
                 height="70"
                 width="70"
                 src="{{ block.settings.image | image_url: width: 300 }}"
                 alt="{{ block.settings.image.alt | default: 'Brand logo' }}"
                 loading="lazy"
-                class="marquee-image"
+                class="du-marquee-image"
                 style="
                   width: {{ section.settings.image_size }}px;
                   height: auto;
@@ -45,148 +45,134 @@
 </section>
 
 <style>
-  .marquee-section {
-    padding-top: var(--marquee-padding-top);
-    padding-bottom: var(--marquee-padding-bottom);
-    background-color: var(--marquee-bg-color);
+  .du-marquee-section {
+    padding-top: var(--du-marquee-padding-top);
+    padding-bottom: var(--du-marquee-padding-bottom);
+    background-color: var(--du-marquee-bg-color);
     overflow: hidden;
     width: 100%;
   }
 
-  .marquee-container {
+  .du-marquee-container {
     width: 100%;
     overflow: hidden;
   }
 
-  .marquee-track {
+  .du-marquee-track {
     display: flex;
-    gap: var(--marquee-gap);
+    gap: var(--du-marquee-gap);
     will-change: transform;
     backface-visibility: hidden;
     transform: translateZ(0);
   }
 
-  .marquee-item {
+  .du-marquee-item {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 var(--marquee-gap);
+    padding: 0 var(--du-marquee-gap);
   }
 
-  .marquee-image {
+  .du-marquee-image {
     max-width: 100%;
     height: auto;
     display: block;
   }
 
-  {% comment %} Fixed infinite smooth animation - uses calculated pixel width instead of percentage {% endcomment %}
-  @keyframes marquee-scroll {
+  @keyframes du-marquee-scroll {
     0% {
       transform: translateX(0);
     }
     100% {
-      transform: translateX(var(--marquee-translate-distance));
+      transform: translateX(var(--du-marquee-translate-distance));
     }
   }
 
-  .marquee-track.animating {
-    animation: marquee-scroll var(--marquee-duration) linear infinite;
+  .du-marquee-track.du-animating {
+    animation: du-marquee-scroll var(--du-marquee-duration) linear infinite;
   }
 
-  {% comment %} Pause animation on hover if enabled {% endcomment %}
   {% if section.settings.pause_on_hover %}
-    .marquee-track.animating:hover {
+    .du-marquee-track.du-animating:hover {
       animation-play-state: paused;
     }
   {% endif %}
 
-  {% comment %} Responsive design {% endcomment %}
+  /* Responsive design */
   @media (max-width: 768px) {
-    .marquee-section {
-      padding-top: calc(var(--marquee-padding-top) * 0.75);
-      padding-bottom: calc(var(--marquee-padding-bottom) * 0.75);
+    .du-marquee-section {
+      padding-top: calc(var(--du-marquee-padding-top) * 0.75);
+      padding-bottom: calc(var(--du-marquee-padding-bottom) * 0.75);
     }
 
-    .marquee-item {
-      padding: 0 calc(var(--marquee-gap) * 0.75);
+    .du-marquee-item {
+      padding: 0 calc(var(--du-marquee-gap) * 0.75);
     }
 
-    .marquee-image {
-      width: calc(var(--marquee-image-size) * 0.75) !important;
+    .du-marquee-image {
+      width: calc(var(--du-marquee-image-size) * 0.75) !important;
     }
   }
 
   @media (max-width: 480px) {
-    .marquee-section {
-      padding-top: calc(var(--marquee-padding-top) * 0.5);
-      padding-bottom: calc(var(--marquee-padding-bottom) * 0.5);
+    .du-marquee-section {
+      padding-top: calc(var(--du-marquee-padding-top) * 0.5);
+      padding-bottom: calc(var(--du-marquee-padding-bottom) * 0.5);
     }
 
-    .marquee-item {
-      padding: 0 calc(var(--marquee-gap) * 0.5);
+    .du-marquee-item {
+      padding: 0 calc(var(--du-marquee-gap) * 0.5);
     }
 
-    .marquee-image {
-      width: calc(var(--marquee-image-size) * 0.5) !important;
+    .du-marquee-image {
+      width: calc(var(--du-marquee-image-size) * 0.5) !important;
     }
   }
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const marqueeTrack = document.querySelector('.marquee-track');
-    const marqueeItems = document.querySelectorAll('.marquee-item');
-    
-    if (marqueeTrack && marqueeItems.length > 0) {
-      {% comment %} Calculate exact pixel width of ONE set of images for seamless looping {% endcomment %}
-      function initializeMarquee() {
-        const itemWidth = marqueeItems[0].offsetWidth;
-        const gap = parseFloat(getComputedStyle(marqueeTrack).gap) || 0;
-        
-        {% comment %} Total width of one complete set (1/4 of total since we have 4 clones) {% endcomment %}
-        const itemsPerSet = marqueeItems.length / 4;
-        const oneSetWidth = (itemWidth * itemsPerSet) + (gap * (itemsPerSet - 1));
-        
-        {% comment %} Set CSS variables for smooth animation {% endcomment %}
-        const speed = parseFloat(marqueeTrack.dataset.speed) || 30;
-        marqueeTrack.style.setProperty('--marquee-translate-distance', `-${oneSetWidth}px`);
-        marqueeTrack.style.setProperty('--marquee-duration', `${speed}s`);
-        
-        {% comment %} Start animation {% endcomment %}
-        marqueeTrack.classList.add('animating');
+  document.addEventListener('DOMContentLoaded', function () {
+    const duTrack = document.querySelector('.du-marquee-track');
+    const duItems = document.querySelectorAll('.du-marquee-item');
+
+    if (duTrack && duItems.length > 0) {
+      function duInitializeMarquee() {
+        const itemWidth = duItems[0].offsetWidth;
+        const gap = parseFloat(getComputedStyle(duTrack).gap) || 0;
+        const itemsPerSet = duItems.length / 4;
+        const oneSetWidth = itemWidth * itemsPerSet + gap * (itemsPerSet - 1);
+
+        const speed = parseFloat(duTrack.dataset.speed) || 30;
+        duTrack.style.setProperty('--du-marquee-translate-distance', `-${oneSetWidth}px`);
+        duTrack.style.setProperty('--du-marquee-duration', `${speed}s`);
+        duTrack.classList.add('du-animating');
       }
-      
-      {% comment %} Wait for images to load before calculating dimensions {% endcomment %}
-      const images = marqueeTrack.querySelectorAll('img');
-      let loadedCount = 0;
-      
-      if (images.length === 0) {
-        initializeMarquee();
+
+      const duImages = duTrack.querySelectorAll('img');
+      let loaded = 0;
+
+      if (duImages.length === 0) {
+        duInitializeMarquee();
       } else {
-        images.forEach(img => {
+        duImages.forEach((img) => {
           if (img.complete) {
-            loadedCount++;
+            loaded++;
           } else {
             img.addEventListener('load', () => {
-              loadedCount++;
-              if (loadedCount === images.length) {
-                initializeMarquee();
-              }
+              loaded++;
+              if (loaded === duImages.length) duInitializeMarquee();
             });
           }
         });
-        
-        if (loadedCount === images.length) {
-          initializeMarquee();
-        }
+
+        if (loaded === duImages.length) duInitializeMarquee();
       }
-      
-      {% comment %} Recalculate on window resize for responsiveness {% endcomment %}
-      let resizeTimeout;
+
+      let duResizeTimer;
       window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(initializeMarquee, 250);
+        clearTimeout(duResizeTimer);
+        duResizeTimer = setTimeout(duInitializeMarquee, 250);
       });
     }
   });
@@ -227,18 +213,9 @@
       "id": "image_size",
       "label": "Logo Size",
       "options": [
-        {
-          "value": "70",
-          "label": "Small"
-        },
-        {
-          "value": "120",
-          "label": "Medium"
-        },
-        {
-          "value": "180",
-          "label": "Large"
-        }
+        { "value": "70", "label": "Small" },
+        { "value": "120", "label": "Medium" },
+        { "value": "180", "label": "Large" }
       ],
       "default": "120"
     },
@@ -262,7 +239,6 @@
       "label": "Gap Between Logos",
       "default": 40
     },
-
     {
       "type": "range",
       "id": "brightness",
@@ -297,7 +273,7 @@
     {
       "name": "Marquee Carousel",
       "category": "Custom",
-      "blocks": [{ "type": "image" }, { "type": "image" }, { "type": "image" }, { "type": "image" }]
+      "blocks": [{ "type": "image" }, { "type": "image" }, { "type": "image" }]
     }
   ]
 }
