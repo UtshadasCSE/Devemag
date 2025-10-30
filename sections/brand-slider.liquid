@@ -1,0 +1,303 @@
+{% comment %}
+  Marquee Carousel Section
+  - Infinite smooth scrolling with multiple clones
+  - Customizable padding, colors, and image sizes
+  - Supports up to 12 images
+  - Zero blank space during animation
+{% endcomment %}
+
+<section
+  class="marquee-section"
+  style="
+    --marquee-padding-top: {{ section.settings.padding_top }}px;
+    --marquee-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --marquee-bg-color: {{ section.settings.bg_color }};
+    --marquee-gap: {{ section.settings.image_gap }}px;
+  "
+>
+  <div class="marquee-container">
+    <div class="marquee-track" data-speed="{{ section.settings.animation_speed }}">
+      {% comment %} Clone images 4 times for seamless infinite loop {% endcomment %}
+      {% for clone in (1..4) %}
+        {% for block in section.blocks %}
+          {% if block.type == 'image' and block.settings.image %}
+            <div class="marquee-item" data-size="{{ section.settings.image_size }}">
+              <img
+                height="70"
+                width="70"
+                src="{{ block.settings.image | image_url: width: 300 }}"
+                alt="{{ block.settings.image.alt | default: 'Brand logo' }}"
+                loading="lazy"
+                class="marquee-image"
+                style="
+                  width: {{ section.settings.image_size }}px;
+                  height: auto;
+                  object-fit: contain;
+                  filter: brightness({{ section.settings.brightness }}%);
+                "
+              >
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee-section {
+    padding-top: var(--marquee-padding-top);
+    padding-bottom: var(--marquee-padding-bottom);
+    background-color: var(--marquee-bg-color);
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .marquee-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: var(--marquee-gap);
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+
+  .marquee-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--marquee-gap);
+  }
+
+  .marquee-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  {% comment %} Fixed infinite smooth animation - uses calculated pixel width instead of percentage {% endcomment %}
+  @keyframes marquee-scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(var(--marquee-translate-distance));
+    }
+  }
+
+  .marquee-track.animating {
+    animation: marquee-scroll var(--marquee-duration) linear infinite;
+  }
+
+  {% comment %} Pause animation on hover if enabled {% endcomment %}
+  {% if section.settings.pause_on_hover %}
+    .marquee-track.animating:hover {
+      animation-play-state: paused;
+    }
+  {% endif %}
+
+  {% comment %} Responsive design {% endcomment %}
+  @media (max-width: 768px) {
+    .marquee-section {
+      padding-top: calc(var(--marquee-padding-top) * 0.75);
+      padding-bottom: calc(var(--marquee-padding-bottom) * 0.75);
+    }
+
+    .marquee-item {
+      padding: 0 calc(var(--marquee-gap) * 0.75);
+    }
+
+    .marquee-image {
+      width: calc(var(--marquee-image-size) * 0.75) !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .marquee-section {
+      padding-top: calc(var(--marquee-padding-top) * 0.5);
+      padding-bottom: calc(var(--marquee-padding-bottom) * 0.5);
+    }
+
+    .marquee-item {
+      padding: 0 calc(var(--marquee-gap) * 0.5);
+    }
+
+    .marquee-image {
+      width: calc(var(--marquee-image-size) * 0.5) !important;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const marqueeTrack = document.querySelector('.marquee-track');
+    const marqueeItems = document.querySelectorAll('.marquee-item');
+    
+    if (marqueeTrack && marqueeItems.length > 0) {
+      {% comment %} Calculate exact pixel width of ONE set of images for seamless looping {% endcomment %}
+      function initializeMarquee() {
+        const itemWidth = marqueeItems[0].offsetWidth;
+        const gap = parseFloat(getComputedStyle(marqueeTrack).gap) || 0;
+        
+        {% comment %} Total width of one complete set (1/4 of total since we have 4 clones) {% endcomment %}
+        const itemsPerSet = marqueeItems.length / 4;
+        const oneSetWidth = (itemWidth * itemsPerSet) + (gap * (itemsPerSet - 1));
+        
+        {% comment %} Set CSS variables for smooth animation {% endcomment %}
+        const speed = parseFloat(marqueeTrack.dataset.speed) || 30;
+        marqueeTrack.style.setProperty('--marquee-translate-distance', `-${oneSetWidth}px`);
+        marqueeTrack.style.setProperty('--marquee-duration', `${speed}s`);
+        
+        {% comment %} Start animation {% endcomment %}
+        marqueeTrack.classList.add('animating');
+      }
+      
+      {% comment %} Wait for images to load before calculating dimensions {% endcomment %}
+      const images = marqueeTrack.querySelectorAll('img');
+      let loadedCount = 0;
+      
+      if (images.length === 0) {
+        initializeMarquee();
+      } else {
+        images.forEach(img => {
+          if (img.complete) {
+            loadedCount++;
+          } else {
+            img.addEventListener('load', () => {
+              loadedCount++;
+              if (loadedCount === images.length) {
+                initializeMarquee();
+              }
+            });
+          }
+        });
+        
+        if (loadedCount === images.length) {
+          initializeMarquee();
+        }
+      }
+      
+      {% comment %} Recalculate on window resize for responsiveness {% endcomment %}
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(initializeMarquee, 250);
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Marquee Carousel",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#000000"
+    },
+    {
+      "type": "select",
+      "id": "image_size",
+      "label": "Logo Size",
+      "options": [
+        {
+          "value": "70",
+          "label": "Small"
+        },
+        {
+          "value": "120",
+          "label": "Medium"
+        },
+        {
+          "value": "180",
+          "label": "Large"
+        }
+      ],
+      "default": "120"
+    },
+    {
+      "type": "range",
+      "id": "animation_speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Animation Speed",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "image_gap",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Gap Between Logos",
+      "default": 40
+    },
+
+    {
+      "type": "range",
+      "id": "brightness",
+      "min": 50,
+      "max": 150,
+      "step": 10,
+      "unit": "%",
+      "label": "Brightness",
+      "default": 100
+    },
+    {
+      "type": "checkbox",
+      "id": "pause_on_hover",
+      "label": "Pause Animation on Hover",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Logo Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Carousel",
+      "blocks": [{ "type": "image" }, { "type": "image" }, { "type": "image" }, { "type": "image" }]
+    }
+  ]
+}
+{% endschema %}
