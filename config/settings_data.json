@@ -74,8 +74,8 @@
     "theme_currencies": "USD | EUR | GBP | VND",
     "content_for_index": [],
     "blocks": {
-      "4188547153274344210": {
-        "type": "shopify://apps/easy-bundle/blocks/app/491a753a-7e8b-4c89-a6fb-9028a1df000b",
+      "9589668175390395553": {
+        "type": "shopify://apps/amose-bundle/blocks/quantity_options/50476a12-3ce4-457e-ba71-230751f626b6",
         "disabled": false,
         "settings": {}
       }
