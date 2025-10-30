@@ -51,22 +51,24 @@
     "header": {
       "type": "header",
       "blocks": {
-        "banner_DeFarx": {
-          "type": "banner",
+        "collection_list_yCaE4g": {
+          "type": "collection-list",
           "settings": {
             "heading": "Shop",
             "container": "inherit",
-            "banner_style": "outside",
-            "banner_image": "shopify://shop_images/Untitled_design_119_1_5.png",
-            "banner_link": "",
-            "banner_title": "New collection",
-            "banner_desc": "",
-            "banner_button_text": "Shop now"
+            "collection_1": "dress",
+            "image_1": "shopify://shop_images/1741512262804-Strides_EID2_3-3-2.png",
+            "collection_2": "men",
+            "image_2": "shopify://shop_images/download_64.png",
+            "collection_3": "",
+            "collection_4": "",
+            "collection_5": "",
+            "collection_6": ""
           }
         }
       },
       "block_order": [
-        "banner_DeFarx"
+        "collection_list_yCaE4g"
       ],
       "custom_css": [
         ".m-topbar a[href*=\"facebook\"] {order: 2;}",
