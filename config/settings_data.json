@@ -73,6 +73,13 @@
     "use_theme_currencies": true,
     "theme_currencies": "USD | EUR | GBP | VND",
     "content_for_index": [],
+    "blocks": {
+      "8212079404471584892": {
+        "type": "shopify://apps/sami-order-limits/blocks/app-embed/89f388f4-7ddb-4368-8d89-3937e2145b24",
+        "disabled": false,
+        "settings": {}
+      }
+    },
     "color_schemes": {
       "default": {
         "settings": {
