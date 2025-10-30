@@ -50,6 +50,24 @@
     },
     "header": {
       "type": "header",
+      "blocks": {
+        "banner_DeFarx": {
+          "type": "banner",
+          "settings": {
+            "heading": "Shop",
+            "container": "inherit",
+            "banner_style": "outside",
+            "banner_image": "shopify://shop_images/Untitled_design_119_1_5.png",
+            "banner_link": "",
+            "banner_title": "New collection",
+            "banner_desc": "",
+            "banner_button_text": "Shop now"
+          }
+        }
+      },
+      "block_order": [
+        "banner_DeFarx"
+      ],
       "custom_css": [
         ".m-topbar a[href*=\"facebook\"] {order: 2;}",
         ".social-media-links {column-gap: 30px;}"
