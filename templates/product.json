@@ -22,6 +22,10 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "material_aD9rCn": {
+          "type": "material",
+          "settings": {}
+        },
         "badge_ChqgGj": {
           "type": "badge",
           "settings": {}
@@ -56,7 +60,7 @@
           "type": "shopify://apps/amose-bundle/blocks/benefits_badge/50476a12-3ce4-457e-ba71-230751f626b6",
           "settings": {
             "product_types": "Cleanse,Purify,Refresh",
-            "button_background": "#E8F5E9",
+            "button_background": "#e8f5e9",
             "button_hover_background": "#e6d6d6",
             "font_size_desktop": 13,
             "font_size_mobile": 12,
@@ -96,6 +100,7 @@
         }
       },
       "block_order": [
+        "material_aD9rCn",
         "badge_ChqgGj",
         "title",
         "price",

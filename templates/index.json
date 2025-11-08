@@ -58,9 +58,74 @@
         "custom_class": "sf-home__slideshow",
         "animations": "inherit"
       }
+    },
+    "marquee_slider_FrCYc3": {
+      "type": "marquee-slider",
+      "blocks": {
+        "image_R64HPT": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_3.png"
+          }
+        },
+        "image_MAYc87": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector.png"
+          }
+        },
+        "image_dqKxtV": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Vector_2.png"
+          }
+        },
+        "image_nTDVxi": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Group.png"
+          }
+        }
+      },
+      "block_order": [
+        "image_R64HPT",
+        "image_MAYc87",
+        "image_dqKxtV",
+        "image_nTDVxi"
+      ],
+      "name": "Marquee Carousel",
+      "settings": {
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "bg_color": "#000000",
+        "image_size": "120",
+        "animation_speed": 30,
+        "image_gap": 40,
+        "brightness": 100,
+        "pause_on_hover": true
+      }
+    },
+    "text_with_carousel_8fhweb": {
+      "type": "text-with-carousel",
+      "name": "Text With Slider",
+      "settings": {
+        "small_heading": "Our Trending Shoe",
+        "main_heading": "Most Popular Products",
+        "description": "Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit",
+        "button_label": "Explore",
+        "button_link": "",
+        "collection": "dress",
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "section_bg_color": "#ffffff",
+        "card_bg_color": "#f5f5f5",
+        "card_text_color": "#000000"
+      }
     }
   },
   "order": [
-    "1621243260e1af0c20"
+    "1621243260e1af0c20",
+    "marquee_slider_FrCYc3",
+    "text_with_carousel_8fhweb"
   ]
 }
