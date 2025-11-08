@@ -87,10 +87,18 @@
           <div product-id="{{ product.id }}" class="alr-display-review-badge"></div>
         {% endif %}
       {%- when 'material' -%}
-        <div>
-          <p>Material:{{ product.metafields.custom.material }}</p>
-        </div>
+        {% if product.metafields.custom.material != blank %}
+          <div>
+            <p>Material:{{ product.metafields.custom.material }}</p>
+          </div>
+        {% endif %}
 
+      {%- when 'designer' -%}
+        {% if product.metafields.custom.designer != blank %}
+          <div>
+            <p>Designer:{{ product.metafields.custom.designer }}</p>
+          </div>
+        {% endif %}
       {%- when 'price' -%}
         <div class="product-block-group--price">
           {% render 'product-prices',
