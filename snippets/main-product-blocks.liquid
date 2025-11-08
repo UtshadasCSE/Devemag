@@ -99,6 +99,12 @@
             <p>Designer:{{ product.metafields.custom.designer }}</p>
           </div>
         {% endif %}
+      {%- when 'status' -%}
+        {% if product.metafields.custom.status != blank %}
+          <div>
+            <p>Status:{{ product.metafields.custom.status }}</p>
+          </div>
+        {% endif %}
       {%- when 'price' -%}
         <div class="product-block-group--price">
           {% render 'product-prices',
