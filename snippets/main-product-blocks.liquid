@@ -86,6 +86,11 @@
         {% if settings.review_app == 'ali_reviews' %}
           <div product-id="{{ product.id }}" class="alr-display-review-badge"></div>
         {% endif %}
+      {%- when 'material' -%}
+        <div>
+          <p>Material:{{ product.metafields.custom.material }}</p>
+        </div>
+
       {%- when 'price' -%}
         <div class="product-block-group--price">
           {% render 'product-prices',
