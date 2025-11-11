@@ -121,11 +121,79 @@
         "card_bg_color": "#f5f5f5",
         "card_text_color": "#000000"
       }
+    },
+    "featured_cards_qRLKnr": {
+      "type": "featured-cards",
+      "blocks": {
+        "card_ric83W": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Untitled_design_76.png",
+            "badge_title": "Title",
+            "sub_heading": "Featured Product",
+            "heading": "Card Title",
+            "description": "Add a compelling description for your product or service here.",
+            "button_label": "View Products",
+            "button_link": "",
+            "show_badge": true,
+            "card_bg": "#ffffff",
+            "text_color": "#2d3748",
+            "description_color": "#718096",
+            "button_bg": "#2d3748"
+          }
+        },
+        "card_eWU9qA": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Untitled_design_76.png",
+            "badge_title": "Title",
+            "sub_heading": "Featured Product",
+            "heading": "Card Title",
+            "description": "Add a compelling description for your product or service here.",
+            "button_label": "View Products",
+            "button_link": "",
+            "show_badge": true,
+            "card_bg": "#ffffff",
+            "text_color": "#2d3748",
+            "description_color": "#718096",
+            "button_bg": "#2d3748"
+          }
+        },
+        "card_rJaJDX": {
+          "type": "card",
+          "settings": {
+            "card_image": "shopify://shop_images/Untitled_design_76.png",
+            "badge_title": "Title",
+            "sub_heading": "Featured Product",
+            "heading": "Card Title",
+            "description": "Add a compelling description for your product or service here.",
+            "button_label": "View Products",
+            "button_link": "",
+            "show_badge": true,
+            "card_bg": "#ffffff",
+            "text_color": "#2d3748",
+            "description_color": "#718096",
+            "button_bg": "#2d3748"
+          }
+        }
+      },
+      "block_order": [
+        "card_ric83W",
+        "card_eWU9qA",
+        "card_rJaJDX"
+      ],
+      "name": "Featured Cards",
+      "settings": {
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "section_bg": "#ffffff"
+      }
     }
   },
   "order": [
     "1621243260e1af0c20",
     "marquee_slider_FrCYc3",
-    "text_with_carousel_8fhweb"
+    "text_with_carousel_8fhweb",
+    "featured_cards_qRLKnr"
   ]
 }
