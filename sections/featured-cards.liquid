@@ -1,9 +1,18 @@
-<section class="fc-product-cards-section" style="background-color: {{ section.settings.section_bg }};">
+<section
+  class="fc-product-cards-section"
+  style="background-color: {{ section.settings.section_color_scheme.settings.background }};"
+>
   <div class="fc-product-cards-container">
     {% if section.blocks.size > 0 %}
       <div class="fc-cards-grid">
         {% for block in section.blocks %}
-          <div class="fc-card" style="background-color: {{ block.settings.card_bg }};">
+          {%- liquid
+            assign card_scheme = block.settings.card_color_scheme
+            assign btn_bg = card_scheme.settings.button_background
+            assign btn_text = card_scheme.settings.button_label
+          -%}
+          <!-- Updated color scheme references from .colors. to .settings. -->
+          <div class="fc-card" style="background-color: {{ card_scheme.settings.background }};">
             <div class="fc-image-container">
               {% if block.settings.card_image %}
                 <img
@@ -25,16 +34,16 @@
 
             <div class="fc-content">
               {% if block.settings.sub_heading %}
-                <div class="fc-doctor-name" style="color: {{ block.settings.text_color }};">
+                <div class="fc-doctor-name" style="color: {{ card_scheme.settings.text }};">
                   {{ block.settings.sub_heading }}
                 </div>
               {% endif %}
 
-              <h3 class="fc-title" style="color: {{ block.settings.text_color }};">
+              <h3 class="fc-title" style="color: {{ card_scheme.settings.text }};">
                 {{ block.settings.heading }}
               </h3>
 
-              <p class="fc-description" style="color: {{ block.settings.description_color }};">
+              <p class="fc-description" style="color: {{ card_scheme.settings.secondary_text }};">
                 {{ block.settings.description }}
               </p>
 
@@ -42,7 +51,7 @@
                 <a
                   href="{{ block.settings.button_link }}"
                   class="fc-btn"
-                  style="background-color: {{ block.settings.button_bg }};"
+                  style="background-color: {{ btn_bg }}; color: {{ btn_text }};"
                 >
                   <span>{{ block.settings.button_label }}</span>
                 </a>
@@ -189,7 +198,6 @@
   .fc-btn {
     display: inline-block;
     width: 100%;
-    color: white;
     border: none;
     padding: 14px 20px;
     font-size: 16px;
@@ -348,7 +356,12 @@
       "label": "Bottom Padding",
       "default": 40
     },
-    { "type": "color", "id": "section_bg", "label": "Section Background", "default": "#ffffff" }
+    {
+      "type": "color_scheme",
+      "id": "section_color_scheme",
+      "label": "Color Scheme",
+      "default": "background-1"
+    }
   ],
   "blocks": [
     {
@@ -369,10 +382,12 @@
         { "type": "text", "id": "button_label", "label": "Button Label", "default": "View Products" },
         { "type": "url", "id": "button_link", "label": "Button Link" },
         { "type": "checkbox", "id": "show_badge", "label": "Show Badge", "default": true },
-        { "type": "color", "id": "card_bg", "label": "Card Background", "default": "#ffffff" },
-        { "type": "color", "id": "text_color", "label": "Card Text Color", "default": "#2d3748" },
-        { "type": "color", "id": "description_color", "label": "Description Color", "default": "#718096" },
-        { "type": "color", "id": "button_bg", "label": "Button Background", "default": "#2d3748" }
+        {
+          "type": "color_scheme",
+          "id": "card_color_scheme",
+          "label": "Color Scheme",
+          "default": "background-1"
+        }
       ]
     }
   ],

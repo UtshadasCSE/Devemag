@@ -106,7 +106,7 @@
       }
     },
     "text_with_carousel_8fhweb": {
-      "type": "text-with-carousel",
+      "type": "text-product-slider",
       "name": "Text With Slider",
       "settings": {
         "small_heading": "Our Trending Shoe",

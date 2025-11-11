@@ -8,7 +8,7 @@
   style="
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
-    background-color: {{ section.settings.section_bg_color }};
+    background-color: {{ section.settings.section_color_scheme.settings.background }};
   "
 >
   <div class="du-container">
@@ -87,6 +87,13 @@
 </div>
 
 <style>
+  {% assign section_bg = section.settings.section_color_scheme.settings.background %}
+  {% assign section_text = section.settings.section_color_scheme.settings.text %}
+  {% assign card_bg = section.settings.card_color_scheme.settings.background %}
+  {% assign card_text = section.settings.card_color_scheme.settings.text %}
+  {% assign card_button_bg = section.settings.card_color_scheme.settings.button_background %}
+  {% assign card_button_text = section.settings.card_color_scheme.settings.button_label %}
+
   .du-product-slider-section {
     width: 100%;
     transition: background-color 0.3s ease;
@@ -108,7 +115,7 @@
 
   .du-heading-small {
     font-size: 14px;
-    color: #111;
+    color: {{ section_text }};
     font-weight: 500;
     margin-bottom: 8px;
     display: flex;
@@ -120,7 +127,7 @@
     content: "";
     width: 30px;
     height: 1.5px;
-    background: #000;
+    background: {{ section_text }};
   }
 
   .du-left-content h1 {
@@ -128,19 +135,21 @@
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 14px;
+    color: {{ section_text }};
   }
 
   .du-description {
-    color: #666;
+    color: {{ section_text }};
     font-size: 14px;
     line-height: 1.6;
     margin-bottom: 22px;
+    opacity: 0.8;
   }
 
   .du-explore-btn {
     display: inline-block;
-    background: #000;
-    color: #fff;
+    background: {{ card_button_bg }};
+    color: {{ card_button_text }};
     border: none;
     padding: 12px 28px;
     font-size: 15px;
@@ -152,7 +161,7 @@
   }
 
   .du-explore-btn:hover {
-    background: #333;
+    opacity: 0.85;
   }
 
   /* Slider Section */
@@ -180,8 +189,8 @@
 
   .du-product-card {
     flex: 0 0 calc((100% - 40px) / 3);
-    background: {{ section.settings.card_bg_color }};
-    border: 1px solid #eee;
+    background: {{ card_bg }};
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 16px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     padding: 20px;
@@ -213,7 +222,7 @@
     font-weight: 500;
     margin-bottom: 10px;
     text-transform: capitalize;
-    color: {{ section.settings.card_text_color }};
+    color: {{ card_text }};
   }
 
   .du-product-footer {
@@ -225,15 +234,15 @@
   .du-product-price {
     font-size: 15px;
     font-weight: 600;
-    color: {{ section.settings.card_text_color }};
+    color: {{ card_text }};
   }
 
   .du-add-btn {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #000;
-    color: #fff;
+    background: {{ card_button_bg }};
+    color: {{ card_button_text }};
     border: none;
     cursor: pointer;
     display: flex;
@@ -245,7 +254,7 @@
   }
 
   .du-add-btn:hover {
-    background: #333;
+    opacity: 0.85;
   }
 
   /* Nav Arrows */
@@ -264,8 +273,9 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    border: 1px solid #ddd;
-    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background: {{ section_bg }};
+    color: {{ section_text }};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -275,8 +285,8 @@
   }
 
   .du-nav-btn:hover {
-    background: #000;
-    color: #fff;
+    background: {{ card_button_bg }};
+    color: {{ card_button_text }};
   }
 
   /* Responsive design */
@@ -478,7 +488,7 @@
 
 {% schema %}
 {
-  "name": "Text With Slider",
+  "name": "Text With Product Slider",
   "settings": [
     {
       "type": "text",
@@ -535,27 +545,19 @@
       "default": 40
     },
     {
-      "type": "color",
-      "id": "section_bg_color",
-      "label": "Background Color",
-      "default": "#ffffff"
+      "type": "color_scheme",
+      "id": "section_color_scheme",
+      "label": "Section Color Scheme"
     },
     {
-      "type": "color",
-      "id": "card_bg_color",
-      "label": "Card Background",
-      "default": "#ffffff"
-    },
-    {
-      "type": "color",
-      "id": "card_text_color",
-      "label": "Card Text Color",
-      "default": "#000000"
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card Color Scheme"
     }
   ],
   "presets": [
     {
-      "name": "Text With Slider",
+      "name": "Text With Product Slider",
       "category": "Custom"
     }
   ]
