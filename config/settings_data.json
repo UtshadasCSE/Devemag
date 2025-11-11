@@ -87,7 +87,7 @@
           "background_secondary": "#f5f5f5",
           "background_gradient": "",
           "text": "#222222",
-          "subtext": "#666666",
+          "subtext": "#222222",
           "heading_text": "#222222",
           "button": "#000000",
           "button_label": "#ffffff",

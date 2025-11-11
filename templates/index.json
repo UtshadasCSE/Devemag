@@ -97,7 +97,7 @@
       "settings": {
         "padding_top": 40,
         "padding_bottom": 40,
-        "bg_color": "#000000",
+        "color_scheme": "dark",
         "image_size": "120",
         "animation_speed": 30,
         "image_gap": 40,
@@ -117,9 +117,8 @@
         "collection": "dress",
         "padding_top": 60,
         "padding_bottom": 60,
-        "section_bg_color": "#ffffff",
-        "card_bg_color": "#f5f5f5",
-        "card_text_color": "#000000"
+        "section_color_scheme": "",
+        "card_color_scheme": "footer"
       }
     },
     "featured_cards_qRLKnr": {
@@ -136,10 +135,7 @@
             "button_label": "View Products",
             "button_link": "",
             "show_badge": true,
-            "card_bg": "#ffffff",
-            "text_color": "#2d3748",
-            "description_color": "#718096",
-            "button_bg": "#2d3748"
+            "card_color_scheme": ""
           }
         },
         "card_eWU9qA": {
@@ -153,10 +149,7 @@
             "button_label": "View Products",
             "button_link": "",
             "show_badge": true,
-            "card_bg": "#ffffff",
-            "text_color": "#2d3748",
-            "description_color": "#718096",
-            "button_bg": "#2d3748"
+            "card_color_scheme": ""
           }
         },
         "card_rJaJDX": {
@@ -170,10 +163,7 @@
             "button_label": "View Products",
             "button_link": "",
             "show_badge": true,
-            "card_bg": "#ffffff",
-            "text_color": "#2d3748",
-            "description_color": "#718096",
-            "button_bg": "#2d3748"
+            "card_color_scheme": ""
           }
         }
       },
@@ -184,9 +174,9 @@
       ],
       "name": "Featured Cards",
       "settings": {
-        "padding_top": 40,
-        "padding_bottom": 40,
-        "section_bg": "#ffffff"
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "section_color_scheme": "footer"
       }
     }
   },

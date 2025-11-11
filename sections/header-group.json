@@ -75,7 +75,7 @@
         ".social-media-links {column-gap: 30px;}"
       ],
       "settings": {
-        "color_scheme": "",
+        "color_scheme": "dark",
         "color_scheme_menu": "",
         "header_design": "logo-left-menu-center",
         "container": "container-fluid",
