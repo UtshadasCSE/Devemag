@@ -1,108 +1,110 @@
 {%- style -%}
-  .optimum-quality {
+  .optimum-quality-{{ section.id }} {
     padding: 60px 20px;
     display: flex;
     align-items: center;
     gap: 80px;
     max-width: 1440px;
     margin: 0 auto;
+    background-color: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
   }
 
-  .optimum-quality__image {
+  .optimum-quality-{{ section.id }} .optimum-quality__image {
     flex: 1;
     border-radius: 20px;
     overflow: hidden;
   }
 
-  .optimum-quality__image img {
+  .optimum-quality-{{ section.id }} .optimum-quality__image img {
     width: 100%;
     height: auto;
     display: block;
   }
 
-  .optimum-quality__content {
+  .optimum-quality-{{ section.id }} .optimum-quality__content {
     flex: 1;
   }
 
-  .optimum-quality__title {
+  .optimum-quality-{{ section.id }} .optimum-quality__title {
     font-size: 36px;
     font-weight: bold;
     margin-bottom: 40px;
-    color: white;
+    color: rgb(var(--color-foreground));
   }
 
-  .optimum-quality__features {
+  .optimum-quality-{{ section.id }} .optimum-quality__features {
     display: flex;
     flex-direction: column;
     gap: 30px;
   }
 
-  .optimum-quality__feature {
+  .optimum-quality-{{ section.id }} .optimum-quality__feature {
     display: flex;
     gap: 15px;
   }
 
-  .optimum-quality__feature-icon {
+  .optimum-quality-{{ section.id }} .optimum-quality__feature-icon {
     width: 44px;
     height: 44px;
     flex-shrink: 0;
   }
 
-  .optimum-quality__feature-icon img {
+  .optimum-quality-{{ section.id }} .optimum-quality__feature-icon img {
     width: 100%;
     height: 100%;
     object-fit: contain;
   }
 
-  .optimum-quality__feature-text h3 {
+  .optimum-quality-{{ section.id }} .optimum-quality__feature-text h3 {
     font-size: 18px;
     font-weight: 600;
     margin: 0 0 8px;
-    color: white;
+    color: rgb(var(--color-foreground));
   }
 
-  .optimum-quality__feature-text p {
+  .optimum-quality-{{ section.id }} .optimum-quality__feature-text p {
     font-size: 14px;
-    color: #666;
     margin: 0;
-    color: white;
+    color: rgba(var(--color-foreground), 0.7);
   }
 
-  .optimum-quality__button {
+  .optimum-quality-{{ section.id }} .optimum-quality__button {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: #d2ab67;
-    color: white;
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
     padding: 12px 24px;
     border-radius: 5px;
     text-decoration: none;
     margin-top: 30px;
-    transition: background 0.3s;
+    transition: all 0.3s;
     font-weight: bold;
   }
 
-  .optimum-quality__button:hover {
-    fill: black;
-    background: #ffff;
-    color: #000;
+  .optimum-quality-{{ section.id }} .optimum-quality__button:hover {
+    background: rgba(var(--color-button), 0.8);
+    transform: translateY(-2px);
   }
-  .optimum-quality__button:hover path {
-    fill: black;
+
+  .optimum-quality-{{ section.id }} .optimum-quality__button svg path {
+    fill: rgb(var(--color-button-text));
   }
+
   @media screen and (max-width: 768px) {
-    .optimum-quality {
+    .optimum-quality-{{ section.id }} {
       flex-direction: column;
     }
 
-    .optimum-quality__image,
-    .optimum-quality__content {
+    .optimum-quality-{{ section.id }} .optimum-quality__image,
+    .optimum-quality-{{ section.id }} .optimum-quality__content {
       width: 100%;
     }
   }
 {%- endstyle -%}
 
-<div class="optimum-quality">
+<div class="optimum-quality-{{ section.id }} color-{{ section.settings.color_scheme }}">
   <div class="optimum-quality__image">
     <img
       src="{{ section.settings.main_image | img_url: 'master' }}"
@@ -149,6 +151,12 @@
 {
   "name": "Optimum Quality",
   "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
     {
       "type": "image_picker",
       "id": "main_image",
