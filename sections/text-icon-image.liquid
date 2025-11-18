@@ -125,7 +125,8 @@
         {% for block in section.blocks %}
           <div class="tii-feature">
             <div class="tii-feature-icon">
-              <img src="{{ block.settings.icon | img_url: 'small' }}" alt="{{ block.settings.heading | escape }}">
+              <img src="{{ block.settings.icon | img_url: 'small' }}" alt="{{ block.settings.heading | escape }}"
+               width="200" height="200">
             </div>
             <div class="tii-feature-text">
               <h3>{{ block.settings.heading }}</h3>
@@ -150,6 +151,8 @@
       <img
         src="{{ section.settings.main_image | img_url: 'master' }}"
         alt="{{ section.settings.main_image.alt | escape }}"
+        width="400"
+        height="400"
       >
     </div>
   </div>
