@@ -1,5 +1,5 @@
 {% comment %}
-  Get the color from the color scheme
+  Get color values from the color scheme
 {% endcomment %}
 
 {% assign background_color = section.settings.color_scheme.settings.background %}
@@ -8,143 +8,126 @@
 {% assign button_bg = section.settings.color_scheme.settings.button %}
 {% assign button_label = section.settings.color_scheme.settings.button_label %}
 {% assign desc_text = section.settings.color_scheme.settings.heading_text %}
+
 {%- style -%}
-  .tiwi-section{
-    background-color: {{background_color}};
+  .tii-section {
+    background-color: {{ background_color }};
   }
-    .optimum-quality-{{ section.id }} {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-      display: flex;
-      align-items: center;
-      gap: 80px;
-      max-width: 1320px;
-      margin: 0 auto;
 
+  .text-icon-image-{{ section.id }} {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* Image on the right */
+  .text-icon-image-{{ section.id }} .tii-content {
+    flex: 1;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-image {
+    flex: 1;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-image img {
+    width: 100%;
+    display: block;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-title {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    color: {{ text_color }};
+  }
+
+  .text-icon-image-{{ section.id }} .tii-features {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-feature {
+    display: flex;
+    gap: 16px;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-feature-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-feature-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-feature-text h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    color: {{ sub_heading_color }};
+  }
+
+  .text-icon-image-{{ section.id }} .tii-feature-text p {
+    font-size: 14px;
+    margin: 0;
+    color: {{ desc_text }};
+  }
+
+  .text-icon-image-{{ section.id }} .tii-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    padding: 12px 24px;
+    border-radius: 6px;
+    background: {{ button_bg }};
+    color: {{ button_label }};
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+  }
+
+  .text-icon-image-{{ section.id }} .tii-button:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .text-icon-image-{{ section.id }} {
+      flex-direction: column-reverse;
+      gap: 40px;
     }
 
-    .optimum-quality-{{ section.id }} .optimum-quality__image {
-      flex: 1;
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__image img {
+    .text-icon-image-{{ section.id }} .tii-content,
+    .text-icon-image-{{ section.id }} .tii-image {
       width: 100%;
-      height: auto;
-      display: block;
     }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__content {
-      flex: 1;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__title {
-      font-size: 36px;
-      font-weight: bold;
-      margin-bottom: 40px;
-      color:{{text_color}};;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__features {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__feature {
-      display: flex;
-      gap: 15px;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__feature-icon {
-      width: 44px;
-      height: 44px;
-      flex-shrink: 0;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__feature-icon img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__feature-text h3 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0 0 8px;
-      color: {{sub_heading_color}};
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__feature-text p {
-      font-size: 14px;
-      margin: 0;
-      color: {{desc_text}};
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__button {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background:{{button_bg}};
-      color: {{button_label}};
-      padding: 12px 24px;
-      border-radius: 5px;
-      text-decoration: none;
-      margin-top: 30px;
-      transition: all 0.3s;
-      font-weight: bold;
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__button:hover {
-      background: rgba(var(--color-button), 0.8);
-      transform: translateY(-2px);
-    }
-
-    .optimum-quality-{{ section.id }} .optimum-quality__button svg path {
-      fill: {{button_label}};
-    }
-
-    @media screen and (max-width: 768px) {
-      .optimum-quality-{{ section.id }} {
-        flex-direction: column;
-      }
-
-      .optimum-quality-{{ section.id }} .optimum-quality__image,
-      .optimum-quality-{{ section.id }} .optimum-quality__content {
-        width: 100%;
-      }
-    }
+  }
 {%- endstyle -%}
 
-<section class="tiwi-section">
-  <div class="optimum-quality-{{ section.id }} color-{{ section.settings.color_scheme }}">
-    <div class="optimum-quality__image">
-      <img
-        src="{{ section.settings.main_image | img_url: 'master' }}"
-        alt="{{ section.settings.main_image.alt | escape }}"
-        loading="lazy"
-        width="{{ section.settings.main_image.width }}"
-        height="{{ section.settings.main_image.height }}"
-      >
-    </div>
+<section class="tii-section">
+  <div class="text-icon-image-{{ section.id }}">
+    <!-- LEFT: TEXT CONTENT -->
+    <div class="tii-content">
+      <h2 class="tii-title">{{ section.settings.title }}</h2>
 
-    <div class="optimum-quality__content">
-      <h2 class="optimum-quality__title">{{ section.settings.title }}</h2>
-
-      <div class="optimum-quality__features">
+      <div class="tii-features">
         {% for block in section.blocks %}
-          <div class="optimum-quality__feature">
-            <div class="optimum-quality__feature-icon">
-              <img
-                src="{{ block.settings.icon | img_url: 'small' }}"
-                alt="{{ block.settings.heading | escape }}"
-                loading="lazy"
-                width="24"
-                height="24"
-              >
+          <div class="tii-feature">
+            <div class="tii-feature-icon">
+              <img src="{{ block.settings.icon | img_url: 'small' }}" alt="{{ block.settings.heading | escape }}">
             </div>
-            <div class="optimum-quality__feature-text">
+            <div class="tii-feature-text">
               <h3>{{ block.settings.heading }}</h3>
               <p>{{ block.settings.text }}</p>
             </div>
@@ -152,12 +135,22 @@
         {% endfor %}
       </div>
 
-      <a href="{{ section.settings.button_link }}" class="optimum-quality__button">
-        {{ section.settings.button_text }}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="currentColor"/>
-        </svg>
-      </a>
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="tii-button">
+          {{ section.settings.button_text }}
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="{{ button_label }}" d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: IMAGE -->
+    <div class="tii-image">
+      <img
+        src="{{ section.settings.main_image | img_url: 'master' }}"
+        alt="{{ section.settings.main_image.alt | escape }}"
+      >
     </div>
   </div>
 </section>
@@ -166,55 +159,21 @@
 {
   "name": "Text Icon Image",
   "settings": [
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "px",
-      "label": "Top Padding",
-      "default": 40
-    },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 5, "label": "Padding Top", "default": 40 },
     {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
       "max": 100,
       "step": 5,
-      "unit": "px",
-      "label": "Bottom Padding",
+      "label": "Padding Bottom",
       "default": 40
     },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color Scheme",
-      "default": "scheme-1"
-    },
-    {
-      "type": "image_picker",
-      "id": "main_image",
-      "label": "Image"
-    },
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Heading",
-      "default": "This is Heading"
-    },
-
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button Label",
-      "default": "SHOP NOW"
-    },
-    {
-      "type": "url",
-      "id": "button_link",
-      "label": "Button Link"
-    }
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color Scheme", "default": "scheme-1" },
+    { "type": "image_picker", "id": "main_image", "label": "Image" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "This is Heading" },
+    { "type": "text", "id": "button_text", "label": "Button Label", "default": "SHOP NOW" },
+    { "type": "url", "id": "button_link", "label": "Button Link" }
   ],
   "blocks": [
     {
@@ -222,23 +181,9 @@
       "name": "Feature",
       "limit": 3,
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "icon",
-          "label": "Feature Icon"
-        },
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "Card Title"
-        },
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Text",
-          "default": "Praesent in aliquam sed malesuada sollicitudin dia. Nulla eras condimentum"
-        }
+        { "type": "image_picker", "id": "icon", "label": "Feature Icon" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Card Title" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Default description text goes here." }
       ]
     }
   ],
@@ -246,17 +191,7 @@
     {
       "name": "Text Icon Image",
       "category": "Custom",
-      "blocks": [
-        {
-          "type": "feature"
-        },
-        {
-          "type": "feature"
-        },
-        {
-          "type": "feature"
-        }
-      ]
+      "blocks": [{ "type": "feature" }, { "type": "feature" }, { "type": "feature" }]
     }
   ]
 }
