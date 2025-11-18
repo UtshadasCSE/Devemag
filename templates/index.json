@@ -178,12 +178,57 @@
         "padding_bottom": 60,
         "section_color_scheme": "footer"
       }
+    },
+    "text_icon_image_NJAhMG": {
+      "type": "text-icon-image",
+      "blocks": {
+        "feature_qjLhNw": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/delivery_2.png",
+            "heading": "Card Title",
+            "text": "Praesent in aliquam sed malesuada sollicitudin dia. Nulla eras condimentum"
+          }
+        },
+        "feature_63Twmr": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/quality_1.png",
+            "heading": "Card Title",
+            "text": "Praesent in aliquam sed malesuada sollicitudin dia. Nulla eras condimentum"
+          }
+        },
+        "feature_47KkNb": {
+          "type": "feature",
+          "settings": {
+            "icon": "shopify://shop_images/secure_2.png",
+            "heading": "Card Title",
+            "text": "Praesent in aliquam sed malesuada sollicitudin dia. Nulla eras condimentum"
+          }
+        }
+      },
+      "block_order": [
+        "feature_qjLhNw",
+        "feature_63Twmr",
+        "feature_47KkNb"
+      ],
+      "name": "Text Icon Image",
+      "settings": {
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "color_scheme": "dark",
+        "main_image": "shopify://shop_images/Untitled_design_76.png",
+        "title": "This is Heading",
+        "button_text": "SHOP NOW",
+        "button_link": ""
+      }
     }
   },
   "order": [
     "1621243260e1af0c20",
     "marquee_slider_FrCYc3",
     "text_with_carousel_8fhweb",
-    "featured_cards_qRLKnr"
+    "featured_cards_qRLKnr",
+    "text_icon_image_NJAhMG"
   ]
 }
