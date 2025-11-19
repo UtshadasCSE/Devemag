@@ -85,22 +85,20 @@
     </div>
   </div>
 </div>
-
+{% assign section_bg = section.settings.section_color_scheme.settings.background %}
+{% assign section_text = section.settings.section_color_scheme.settings.text %}
+{% assign card_bg = section.settings.card_color_scheme.settings.background %}
+{% assign card_text = section.settings.card_color_scheme.settings.text %}
+{% assign card_button_bg = section.settings.card_color_scheme.settings.button_background %}
+{% assign card_button_text = section.settings.card_color_scheme.settings.button_label %}
 <style>
-  {% assign section_bg = section.settings.section_color_scheme.settings.background %}
-  {% assign section_text = section.settings.section_color_scheme.settings.text %}
-  {% assign card_bg = section.settings.card_color_scheme.settings.background %}
-  {% assign card_text = section.settings.card_color_scheme.settings.text %}
-  {% assign card_button_bg = section.settings.card_color_scheme.settings.button_background %}
-  {% assign card_button_text = section.settings.card_color_scheme.settings.button_label %}
-
   .du-product-slider-section {
     width: 100%;
     transition: background-color 0.3s ease;
   }
 
   .du-container {
-    max-width: 1320px;
+    max-width: {{ section.settings.max_container }}px;;
     margin: 0 auto;
     display: flex;
     gap: 40px;
@@ -266,6 +264,7 @@
     justify-content: space-between;
     transform: translateY(-50%);
     pointer-events: none;
+
   }
 
   .du-nav-btn {
@@ -274,7 +273,7 @@
     height: 36px;
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    background: {{ section_bg }};
+    background: {{ card_button_bg }};
     color: {{ section_text }};
     display: flex;
     align-items: center;
@@ -490,6 +489,16 @@
 {
   "name": "Text With Product Slider",
   "settings": [
+    {
+      "type": "range",
+      "id": "max_container",
+      "min": 1100,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "label": "Container",
+      "default": 1320
+    },
     {
       "type": "text",
       "id": "small_heading",

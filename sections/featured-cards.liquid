@@ -73,7 +73,7 @@
   }
 
   .fc-product-cards-container {
-    max-width: 1320px;
+    max-width: {{section.settings.max_container}}px;
     margin: 0 auto;
   }
 
@@ -336,6 +336,16 @@
 {
   "name": "Featured Cards",
   "settings": [
+    {
+      "type": "range",
+      "id": "max_container",
+      "min": 1100,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "label": "Container",
+      "default": 1320
+    },
     {
       "type": "range",
       "id": "padding_top",
