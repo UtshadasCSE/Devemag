@@ -1,0 +1,379 @@
+{% comment %}
+  Category Tabs Section
+  Displays tabbed product collections with customizable styling
+{% endcomment %}
+{% assign bg_color = section.settings.color_scheme.settings.background %}
+{% assign text_color = section.settings.color_scheme.settings.text %}
+{% assign button_bg = section.settings.color_scheme.settings.button %}
+{% assign button_label = section.settings.color_scheme.settings.button_label %}
+<style>
+  .category-tabs-section {
+    background-color: {{ bg_color }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+
+  .category-tabs-container {
+    max-width: {{ section.settings.max_container }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .category-tabs-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 3rem;
+    color: {{ text_color }};
+    text-transform: uppercase;
+  }
+
+  .tabs-navigation {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .tab-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    text-decoration: none;
+    color: #666;
+  }
+
+  .tab-button:hover {
+    border-color: #ddd;
+    transform: translateY(-2px);
+  }
+
+  .tab-button.active {
+    border-color: #333;
+    background-color: #f9f9f9;
+  }
+
+  .tab-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tab-label {
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  .products-carousel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .product-card {
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .product-image {
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .product-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: {{ text_color }};
+  }
+
+  .product-price {
+    font-size: 1rem;
+    color: #666;
+  }
+
+  .shop-all-button {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    background-color: {{ button_bg }};
+    color: {{button_label}};
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+
+  .shop-all-button:hover {
+    background-color: #c2185b;
+  }
+
+  @media (max-width: 768px) {
+    .category-tabs-title {
+      font-size: 2rem;
+    }
+
+    .tabs-navigation {
+      gap: 0.5rem;
+    }
+
+    .tab-button {
+      min-width: 80px;
+      padding: 0.75rem;
+    }
+
+    .tab-icon {
+      font-size: 1.5rem;
+    }
+
+    .products-carousel {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+  }
+</style>
+
+<section class="category-tabs-section">
+  <div class="category-tabs-container">
+    {% if section.settings.section_title != blank %}
+      <h2 class="category-tabs-title">{{ section.settings.section_title }}</h2>
+    {% endif %}
+
+    <div class="tabs-navigation">
+      {% for block in section.blocks %}
+        {% if block.settings.collection != blank %}
+          <button
+            class="tab-button {% if forloop.first %}active{% endif %}"
+            data-tab="{{ forloop.index }}"
+            onclick="switchTab({{ forloop.index }})"
+          >
+            <span class="tab-icon">{{ block.settings.icon }}</span>
+            <span class="tab-label">{{ block.settings.label }}</span>
+          </button>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    {% for block in section.blocks %}
+      {% if block.settings.collection != blank %}
+        {% assign collection = collections[block.settings.collection] %}
+        <div class="tab-content {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.index }}">
+          <div class="products-carousel">
+            {% for product in collection.products limit: section.settings.products_to_show %}
+              <a href="{{ product.url }}" class="product-card">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | img_url: '400x400' }}"
+                    alt="{{ product.title }}"
+                    class="product-image"
+                    height="200"
+                    width="200"
+                  >
+                {% else %}
+                  <div
+                    class="product-image"
+                    style="background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;"
+                  >
+                    <span>No Image</span>
+                  </div>
+                {% endif %}
+                <h3 class="product-title">{{ product.title }}</h3>
+                <p class="product-price">
+                  {% if product.compare_at_price > product.price %}
+                    <span style="text-decoration: line-through; color: #999;">
+                      {{- product.compare_at_price | money -}}
+                    </span>
+                  {% endif %}
+                  From {{ product.price | money }}
+                </p>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% if section.settings.show_shop_all_button %}
+      <a href="{{ section.settings.shop_all_url | default: '/collections/all' }}" class="shop-all-button">
+        {{ section.settings.shop_all_text | default: 'Shop All' }}
+      </a>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  function switchTab(tabNumber) {
+    // Remove active class from all tabs and content
+    document.querySelectorAll('.tab-button').forEach((button) => {
+      button.classList.remove('active');
+    });
+    document.querySelectorAll('.tab-content').forEach((content) => {
+      content.classList.remove('active');
+    });
+
+    // Add active class to clicked tab and corresponding content
+    document.querySelector(`[data-tab="${tabNumber}"]`).classList.add('active');
+    document.querySelector(`#tab-${tabNumber}`).classList.add('active');
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Icon Category Tabs",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "max_container",
+      "min": 1100,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "label": "Container",
+      "default": 1320
+    },
+    {
+      "type": "text",
+      "id": "section_title",
+      "label": "Heading",
+      "default": "Shop By Category"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Products to show",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shop_all_button",
+      "label": "Show button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shop_all_text",
+      "label": "Button label",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "shop_all_url",
+      "label": "Button link",
+      "info": "Leave blank to link to all collections"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category_tab",
+      "name": "Category Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon/Emoji",
+          "default": "😊",
+          "info": "Use emoji or text icon"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab Label",
+          "default": "Category"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Category Tabs",
+      "blocks": [
+        {
+          "type": "category_tab",
+          "settings": {
+            "icon": "😊",
+            "label": "Funny"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "icon": "👺",
+            "label": "Anime"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "icon": "😍",
+            "label": "Pop Culture"
+          }
+        },
+        {
+          "type": "category_tab",
+          "settings": {
+            "icon": "🎮",
+            "label": "Gaming"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
