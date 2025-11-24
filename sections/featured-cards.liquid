@@ -1,30 +1,53 @@
+{% comment %}
+  ==============================================================================
+  SECTION: FEATURED CARDS
+  ==============================================================================
+  Description:
+    A flexible, responsive grid section designed to feature multiple product,
+    service, or content cards.
+    - Each card is a customizable block, including its own image, badge, text, and button.
+    - Uses a dedicated color scheme for the main section background.
+    - Each individual card can use its own unique color scheme.
+{% endcomment %}
+
 <section
   class="fc-product-cards-section"
   style="background-color: {{ section.settings.section_color_scheme.settings.background }};"
 >
   <div class="fc-product-cards-container">
     {% if section.blocks.size > 0 %}
+      {% comment %} Grid container for the cards {% endcomment %}
       <div class="fc-cards-grid">
+        {% comment %} Loop through each card block added in the theme editor {% endcomment %}
         {% for block in section.blocks %}
           {%- liquid
             assign card_scheme = block.settings.card_color_scheme
-            assign btn_bg = card_scheme.settings.button_background
+            assign btn_bg = card_scheme.settings.button
             assign btn_text = card_scheme.settings.button_label
           -%}
-          <!-- Updated color scheme references from .colors. to .settings. -->
-          <div class="fc-card" style="background-color: {{ card_scheme.settings.background }};">
+
+          {% comment %} Individual Card HTML structure {% endcomment %}
+          <div
+            class="fc-card"
+            style="background-color: {{ card_scheme.settings.background }};"
+            {{ block.shopify_attributes }}
+          >
+            {% comment %} Card Image and Badge Container {% endcomment %}
             <div class="fc-image-container">
               {% if block.settings.card_image %}
                 <img
                   src="{{ block.settings.card_image | image_url: width: 1500 }}"
-                  alt="{{ block.settings.heading }}"
+                  alt="{{ block.settings.heading | escape }}"
                   loading="lazy"
                   height="300"
                   width="400"
                 >
               {% else %}
+                {% comment %} Placeholder if no image is set {% endcomment %}
                 <div class="fc-image-placeholder"></div>
               {% endif %}
+
+              {% comment %} Optional Badge/Tag element (Show only if checkbox is checked) {% endcomment %}
               {% if block.settings.show_badge %}
                 <div class="fc-badge">
                   <div class="fc-badge-icon">{{ block.settings.badge_title }}</div>
@@ -32,21 +55,26 @@
               {% endif %}
             </div>
 
+            {% comment %} Card Text Content Area {% endcomment %}
             <div class="fc-content">
+              {% comment %} Sub-Heading/Doctor Name (uses main text color from card scheme) {% endcomment %}
               {% if block.settings.sub_heading %}
                 <div class="fc-doctor-name" style="color: {{ card_scheme.settings.text }};">
                   {{ block.settings.sub_heading }}
                 </div>
               {% endif %}
 
+              {% comment %} Main Heading (uses main text color from card scheme) {% endcomment %}
               <h3 class="fc-title" style="color: {{ card_scheme.settings.text }};">
                 {{ block.settings.heading }}
               </h3>
 
+              {% comment %} Description/Paragraph (uses secondary text color from card scheme) {% endcomment %}
               <p class="fc-description" style="color: {{ card_scheme.settings.secondary_text }};">
                 {{ block.settings.description }}
               </p>
 
+              {% comment %} Call-to-Action Button (Only render if both label and link are set) {% endcomment %}
               {% if block.settings.button_label and block.settings.button_link %}
                 <a
                   href="{{ block.settings.button_link }}"
@@ -61,29 +89,40 @@
         {% endfor %}
       </div>
     {% else %}
+      {% comment %} Placeholder content if no blocks have been added yet {% endcomment %}
       <p class="fc-placeholder-text">Add cards to get started</p>
     {% endif %}
   </div>
 </section>
-{% comment %} Style for the section  {% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  CSS STYLING
+  ------------------------------------------------------------------------------
+{% endcomment %}
 <style>
+  /* Section Wrapper Styles */
   .fc-product-cards-section {
     padding: {{ section.settings.padding_top }}px 20px {{ section.settings.padding_bottom }}px;
     transition: background-color 0.3s ease;
   }
 
+  /* Container for max width and centering */
   .fc-product-cards-container {
     max-width: {{section.settings.max_container}}px;
     margin: 0 auto;
   }
 
+  /* Grid Layout: Uses CSS Grid for flexible, responsive columns */
   .fc-cards-grid {
     display: grid;
+    /* auto-fit creates columns that are at least 320px wide */
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     width: 100%;
   }
 
+  /* Individual Card Styling */
   .fc-card {
     border-radius: 20px;
     box-shadow: 0 5px 6px rgba(0, 0, 0, 0.1);
@@ -91,22 +130,26 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100%; /* Ensures all cards in a row have equal height */
   }
 
+  /* Hover effect for the entire card */
   .fc-card:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
   }
 
+  /* Image Aspect Ratio Container */
   .fc-image-container {
     position: relative;
     width: 100%;
+    /* Creates a 4:3 aspect ratio (75% of width) */
     padding-bottom: 75%;
     overflow: hidden;
     background: #f0f0f0;
   }
 
+  /* Image object-fit styling */
   .fc-image-container img {
     position: absolute;
     top: 0;
@@ -117,6 +160,7 @@
     transition: transform 0.5s ease;
   }
 
+  /* Placeholder styling when no image is uploaded */
   .fc-image-placeholder {
     position: absolute;
     top: 0;
@@ -131,23 +175,20 @@
     font-size: 14px;
   }
 
+  /* Image zoom effect on card hover */
   .fc-card:hover .fc-image-container img {
     transform: scale(1.05);
   }
 
+  /* Badge/Tag Positioning and Pulse Animation */
   .fc-badge {
     position: absolute;
     top: 20px;
     left: 20px;
-    width: 70px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fc-pulse 2s infinite;
     z-index: 2;
   }
 
+  /* Keyframe animation for subtle pulsing effect */
   @keyframes fc-pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
@@ -166,13 +207,15 @@
     font-weight: bold;
   }
 
+  /* Card Content Text Area */
   .fc-content {
     padding: 30px;
-    flex: 1;
+    flex: 1; /* Allows content area to fill remaining vertical space */
     display: flex;
     flex-direction: column;
   }
 
+  /* Text Styling */
   .fc-doctor-name {
     font-size: 12px;
     font-weight: 600;
@@ -191,10 +234,11 @@
   .fc-description {
     font-size: 15px;
     line-height: 1.6;
-    margin-bottom: auto;
+    margin-bottom: auto; /* Pushes the button to the bottom */
     padding-bottom: 20px;
   }
 
+  /* Button Styling */
   .fc-btn {
     display: inline-block;
     width: 100%;
@@ -212,6 +256,7 @@
     font-family: inherit;
   }
 
+  /* Button subtle ripple effect on hover using ::before pseudo-element */
   .fc-btn::before {
     content: '';
     position: absolute;
@@ -231,7 +276,7 @@
   }
 
   .fc-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px); /* Lift button slightly */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   }
 
@@ -241,9 +286,10 @@
 
   .fc-btn span {
     position: relative;
-    z-index: 1;
+    z-index: 1; /* Ensures text is above the ripple effect */
   }
 
+  /* Placeholder text style */
   .fc-placeholder-text {
     text-align: center;
     color: #999;
@@ -251,7 +297,11 @@
     font-size: 16px;
   }
 
-  /* Responsive Design */
+  /* ---------------------------------- */
+  /* Responsive Design Media Queries */
+  /* ---------------------------------- */
+
+  /* Tablet (1024px) Adjustments */
   @media (max-width: 1024px) {
     .fc-cards-grid {
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -259,12 +309,15 @@
     }
   }
 
+  /* Mobile (768px) Adjustments */
   @media (max-width: 768px) {
     .fc-product-cards-section {
+      /* Dynamic padding reduction for mobile */
       padding: {{ section.settings.padding_top | divided_by: 1.5 | round }}px 16px {{ section.settings.padding_bottom | divided_by: 1.5 | round }}px;
     }
 
     .fc-cards-grid {
+      /* Stack cards vertically on mobile */
       grid-template-columns: 1fr;
       gap: 20px;
     }
@@ -286,6 +339,7 @@
     }
   }
 
+  /* Small Mobile (480px) Adjustments */
   @media (max-width: 480px) {
     .fc-product-cards-section {
       padding: 20px 12px;
@@ -301,6 +355,7 @@
     }
 
     .fc-badge-icon {
+      /* Smaller badge text/icon */
       width: 44px;
       height: 44px;
       font-size: 20px;
@@ -331,7 +386,13 @@
     }
   }
 </style>
-{% comment %} Schema for the section {% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  SHOPIFY SCHEMA (Theme Editor Settings)
+  ------------------------------------------------------------------------------
+  Defines the editable settings and repeatable blocks for the customizer.
+{% endcomment %}
 {% schema %}
 {
   "name": "Featured Cards",
@@ -370,14 +431,14 @@
       "type": "color_scheme",
       "id": "section_color_scheme",
       "label": "Color Scheme",
-      "default": "background-1"
+      "default": "scheme-1"
     }
   ],
   "blocks": [
     {
       "type": "card",
-      "name": "Card",
-      "limit": 6,
+      "name": "Card Item",
+      "limit": 6 /* Maximum number of cards allowed in the section */,
       "settings": [
         { "type": "image_picker", "id": "card_image", "label": "Card Image" },
         { "type": "text", "id": "badge_title", "label": "Badge Title", "default": "Title" },
@@ -389,18 +450,24 @@
           "label": "Description",
           "default": "Add a compelling description for your product or service here."
         },
-        { "type": "text", "id": "button_label", "label": "Button Label", "default": "View Products" },
-        { "type": "url", "id": "button_link", "label": "Button Link" },
-        { "type": "checkbox", "id": "show_badge", "label": "Show Badge", "default": true },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "View Products" },
+        { "type": "url", "id": "button_link", "label": "Button link" },
+        { "type": "checkbox", "id": "show_badge", "label": "Show badge", "default": true },
         {
           "type": "color_scheme",
           "id": "card_color_scheme",
           "label": "Color Scheme",
-          "default": "background-1"
+          "default": "scheme-2"
         }
       ]
     }
   ],
-  "presets": [{ "name": "Featured Cards", "category": "Custom", "blocks": [{ "type": "card" }, { "type": "card" }] }]
+  "presets": [
+    {
+      "name": "Featured Cards",
+      "category": "Custom",
+      "blocks": [{ "type": "card" }, { "type": "card" }]
+    }
+  ]
 }
 {% endschema %}
