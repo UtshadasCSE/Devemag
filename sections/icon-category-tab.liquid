@@ -1,45 +1,88 @@
 {% comment %}
-  Category Tabs Section – Original code with ict- prefix only
+  ==============================================================================
+  SECTION: ICON CATEGORY TABS
+  ==============================================================================
+  Description:
+    A product showcase section that displays products from different collections
+    using a tabbed interface.
+    - Tabs are configured with icons/images and link to specific Shopify collections.
+    - Uses JavaScript for client-side tab switching to avoid page reloads.
+    - Products are displayed in a responsive grid.
 {% endcomment %}
 
-{% comment %} Html skeleton for the section {% endcomment %}
+{% comment %}
+  ------------------------------------------------------------------------------
+  HTML SKELETON
+  ------------------------------------------------------------------------------
+{% endcomment %}
 <section class="ict-section">
   <div class="ict-container">
+    {% comment %} Section Heading {% endcomment %}
     {% if section.settings.section_title != blank %}
       <h2 class="ict-title">{{ section.settings.section_title }}</h2>
     {% endif %}
 
+    {% comment %}
+      TABS NAVIGATION (BUTTONS)
+      Iterates through blocks to create clickable buttons.
+    {% endcomment %}
     <div class="ict-tabs-navigation">
       {% for block in section.blocks %}
+        {% comment %} Only render a tab button if a collection is selected {% endcomment %}
         {% if block.settings.collection != blank %}
           <button
             class="ict-tab-button {% if forloop.first %}active{% endif %}"
             data-tab="{{ forloop.index }}"
             onclick="switchTab({{ forloop.index }})"
+            {{ block.shopify_attributes }}
           >
-            <span class="ict-tab-icon">{{ block.settings.icon }}</span>
+            {% comment %}
+              NOTE: The 'icon' field has been changed to 'image_picker' in the schema.
+              We now check for an image and fall back to the old text/emoji if not found.
+            {% endcomment %}
+            <span class="ict-tab-icon">
+              {% if block.settings.icon_image != blank %}
+                <img
+                  src="{{ block.settings.icon_image | image_url: width: 48 }}"
+                  alt="{{ block.settings.label | escape }}"
+                  width="48"
+                  height="48"
+                >
+              {% else %}
+                {{ block.settings.icon_text }}
+              {% endif %}
+            </span>
             <span class="ict-tab-label">{{ block.settings.label }}</span>
           </button>
         {% endif %}
       {% endfor %}
     </div>
 
+    {% comment %}
+      TAB CONTENTS (PRODUCT GRIDS)
+      Iterates through blocks again to create the content panels.
+    {% endcomment %}
     {% for block in section.blocks %}
       {% if block.settings.collection != blank %}
         {% assign collection = collections[block.settings.collection] %}
+
+        {% comment %} Content panel: ID matches the data-tab number for JS control {% endcomment %}
         <div class="ict-tab-content {% if forloop.first %}active{% endif %}" id="tab-{{ forloop.index }}">
           <div class="ict-products-carousel">
+            {% comment %} Product Loop: Fetch products from the assigned collection {% endcomment %}
             {% for product in collection.products limit: section.settings.products_to_show %}
               <a href="{{ product.url }}" class="ict-product-card">
+                {% comment %} Product Image {% endcomment %}
                 {% if product.featured_image %}
                   <img
                     src="{{ product.featured_image | img_url: '400x400' }}"
-                    alt="{{ product.title }}"
+                    alt="{{ product.title | escape }}"
                     class="ict-product-image"
                     height="200"
                     width="200"
                   >
                 {% else %}
+                  {% comment %} Placeholder if no featured image exists {% endcomment %}
                   <div
                     class="ict-product-image"
                     style="background-color: #f5f5f5; display: flex; align-items: center; justify-content: center;"
@@ -47,8 +90,11 @@
                     <span>No Image</span>
                   </div>
                 {% endif %}
+
+                {% comment %} Product Details {% endcomment %}
                 <h3 class="ict-product-title">{{ product.title }}</h3>
                 <p class="ict-product-price">
+                  {% comment %} Display compare-at-price (strikethrough) if it's higher than the current price {% endcomment %}
                   {% if product.compare_at_price > product.price %}
                     <span style="text-decoration: line-through; color: #999;">
                       {{- product.compare_at_price | money -}}
@@ -63,22 +109,34 @@
       {% endif %}
     {% endfor %}
 
+    {% comment %} Global "Shop All" Button {% endcomment %}
     {% if section.settings.show_shop_all_button %}
-      <a href="{{ section.settings.shop_all_url | default: '/collections/all' }}" class="ict-shop-all-button">
+      <a
+        href="{{ section.settings.shop_all_url | default: '/collections/all' }}"
+        class="ict-shop-all-button"
+      >
         {{ section.settings.shop_all_text | default: 'Shop All' }}
       </a>
     {% endif %}
   </div>
 </section>
-{% comment %} Style for the section {% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  CSS STYLING
+  ------------------------------------------------------------------------------
+  Uses colors, padding, and layout settings defined in the schema.
+{% endcomment %}
 <style>
   .ict-section {
+    /* Dynamic background color from selected color scheme */
     background-color: {{ section.settings.color_scheme.settings.background }};
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
   }
 
   .ict-container {
+    /* Centers container and applies max width from settings */
     max-width: {{ section.settings.max_container }}px;
     margin: 0 auto;
     padding: 0 20px;
@@ -95,8 +153,8 @@
 
   .ict-tabs-navigation {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
+    justify-content: center; /* Center the tab buttons */
+    flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
     gap: 1rem;
     margin-bottom: 3rem;
   }
@@ -118,11 +176,11 @@
 
   .ict-tab-button:hover {
     border-color: #ddd;
-    transform: translateY(-2px);
+    transform: translateY(-2px); /* Subtle hover effect */
   }
 
   .ict-tab-button.active {
-    border-color: #333;
+    border-color: #333; /* Highlight active tab */
     background-color: #f9f9f9;
   }
 
@@ -131,20 +189,30 @@
     margin-bottom: 0.5rem;
   }
 
+  /* Ensure images within the icon span are sized correctly */
+  .ict-tab-icon img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+
   .ict-tab-label {
     font-weight: 500;
     font-size: 0.9rem;
   }
 
+  /* Tab Content Visibility */
   .ict-tab-content {
-    display: none;
+    display: none; /* Hide all content by default */
   }
 
   .ict-tab-content.active {
-    display: block;
+    display: block; /* Show only the active content */
   }
 
+  /* Product Grid Layout */
   .ict-products-carousel {
+    /* Responsive Grid: Creates columns that are at least 280px wide */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
@@ -155,12 +223,17 @@
     text-align: center;
     text-decoration: none;
     color: inherit;
+    transition: transform 0.2s ease;
+  }
+
+  .ict-product-card:hover {
+    transform: translateY(-5px); /* Lift card on hover */
   }
 
   .ict-product-image {
     width: 100%;
     height: 300px;
-    object-fit: contain;
+    object-fit: contain; /* Ensures product is visible, not clipped */
     border-radius: 20px;
     margin-bottom: 1rem;
   }
@@ -177,6 +250,7 @@
     color: #666;
   }
 
+  /* Shop All Button Styling */
   .ict-shop-all-button {
     display: block;
     width: fit-content;
@@ -191,9 +265,10 @@
   }
 
   .ict-shop-all-button:hover {
-    background-color: #c2185b;
+    background-color: #c2185b; /* Simple hover color */
   }
 
+  /* Responsive Adjustments for Mobile */
   @media (max-width: 768px) {
     .ict-title {
       font-size: 2rem;
@@ -213,29 +288,45 @@
     }
 
     .ict-products-carousel {
+      /* Adjust min column size for smaller screens */
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 1rem;
     }
   }
 </style>
-{% comment %} JS for tab switching functionality {% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  JAVASCRIPT FOR TAB SWITCHING
+  ------------------------------------------------------------------------------
+  Handles the client-side logic to show/hide the correct product grid.
+{% endcomment %}
 <script>
   function switchTab(tabNumber) {
+    // 1. Deactivate all buttons
     document.querySelectorAll('.ict-tab-button').forEach((button) => {
       button.classList.remove('active');
     });
+    // 2. Hide all content panels
     document.querySelectorAll('.ict-tab-content').forEach((content) => {
       content.classList.remove('active');
     });
 
+    // 3. Activate the clicked button using its 'data-tab' attribute
     document.querySelector(`[data-tab="${tabNumber}"]`).classList.add('active');
+    // 4. Show the corresponding content panel using its 'id'
     document.querySelector(`#tab-${tabNumber}`).classList.add('active');
   }
 </script>
-{% comment %} Schema for the section {% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  SHOPIFY SCHEMA (Theme Editor Settings)
+  ------------------------------------------------------------------------------
+{% endcomment %}
 {% schema %}
 {
-  "name": "Icon Category Tabs",
+  "name": "Category Tabs",
   "tag": "section",
   "class": "section",
   "settings": [
@@ -248,18 +339,6 @@
       "unit": "px",
       "label": "Container",
       "default": 1320
-    },
-    {
-      "type": "text",
-      "id": "section_title",
-      "label": "Heading",
-      "default": "Shop By Category"
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "Color Scheme",
-      "default": "scheme-1"
     },
     {
       "type": "range",
@@ -282,12 +361,19 @@
       "default": 60
     },
     {
+      "type": "text",
+      "id": "section_title",
+      "label": "Heading",
+      "default": "Shop By Category"
+    },
+
+    {
       "type": "range",
       "id": "products_to_show",
       "min": 2,
       "max": 12,
       "step": 1,
-      "label": "Products to show",
+      "label": "Products to show per tab",
       "default": 4
     },
     {
@@ -307,6 +393,12 @@
       "id": "shop_all_url",
       "label": "Button link",
       "info": "Leave blank to link to all collections"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
     }
   ],
   "blocks": [
@@ -315,11 +407,17 @@
       "name": "Category Tab",
       "settings": [
         {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Icon Image",
+          "info": "Upload an image (e.g., SVG, PNG) for the tab icon."
+        },
+        {
           "type": "text",
-          "id": "icon",
-          "label": "Icon/Emoji",
-          "default": "smiling face",
-          "info": "Use emoji or text icon"
+          "id": "icon_text",
+          "label": "Icon/Emoji Fallback",
+          "default": "✨",
+          "info": "Use this if no Tab Icon Image is selected (e.g., an emoji like 👕 or text icon)."
         },
         {
           "type": "text",
@@ -330,20 +428,21 @@
         {
           "type": "collection",
           "id": "collection",
-          "label": "Collection"
+          "label": "Collection to Display"
         }
       ]
     }
   ],
+
   "presets": [
     {
-      "name": "Custom Category Tabs",
+      "name": "Category Tabs",
       "category": "Custom",
       "blocks": [
-        { "type": "category_tab", "settings": { "icon": "smiling face", "label": "Funny" } },
-        { "type": "category_tab", "settings": { "icon": "goblin", "label": "Anime" } },
-        { "type": "category_tab", "settings": { "icon": "heart eyes", "label": "Pop Culture" } },
-        { "type": "category_tab", "settings": { "icon": "video game", "label": "Gaming" } }
+        { "type": "category_tab", "settings": { "icon_text": "😂", "label": "Funny" } },
+        { "type": "category_tab", "settings": { "icon_text": "👺", "label": "Anime" } },
+        { "type": "category_tab", "settings": { "icon_text": "😍", "label": "Pop Culture" } },
+        { "type": "category_tab", "settings": { "icon_text": "🎮", "label": "Gaming" } }
       ]
     }
   ]

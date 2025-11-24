@@ -1,23 +1,55 @@
 {% comment %}
-  Get color values from the color scheme
+  ==============================================================================
+  SECTION: TEXT ICON IMAGE
+  ==============================================================================
+  Description:
+    A split-layout section featuring text and feature icons on the left,
+    and a large main image on the right.
+    - Fully responsive (stacks on mobile).
+    - Uses Shopify's "Color Scheme" system for dynamic theming.
+    - Supports multiple "Feature" blocks.
+{% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  LIQUID VARIABLE ASSIGNMENTS
+  ------------------------------------------------------------------------------
+  Here we extract specific color values from the selected "Color Scheme" setting.
+  This allows the section to automatically adapt to the theme's global colors.
 {% endcomment %}
 {% assign background_color = section.settings.color_scheme.settings.background %}
 {% assign text_color = section.settings.color_scheme.settings.text %}
 {% assign sub_heading_color = section.settings.color_scheme.settings.subtext %}
+{% comment %} Note: 'subtext' might not exist in all standard schemes, ensure it exists in your theme settings_schema.json {% endcomment %}
 {% assign button_bg = section.settings.color_scheme.settings.button %}
 {% assign button_label = section.settings.color_scheme.settings.button_label %}
 {% assign desc_text = section.settings.color_scheme.settings.heading_text %}
+{% comment %} Note: 'heading_text' is an unusual key for color schemes, usually it's just 'text' or 'secondary_text' {% endcomment %}
 
-{% comment %} Html skeleton for the section {% endcomment %}
+{% comment %}
+  ------------------------------------------------------------------------------
+  HTML STRUCTURE
+  ------------------------------------------------------------------------------
+{% endcomment %}
 <section class="tii-section">
+  {% comment %}
+    Main Container:
+    Uses a unique class based on section.id to prevent style conflicts with other instances.
+  {% endcomment %}
   <div class="text-icon-image-{{ section.id }}">
-    <!-- LEFT: TEXT CONTENT -->
     <div class="tii-content">
+      {% comment %} Main Section Heading {% endcomment %}
       <h2 class="tii-title">{{ section.settings.title }}</h2>
 
+      {% comment %}
+        Feature Loop:
+        Iterates through the 'blocks' added in the theme editor.
+        Limits are defined in the schema (currently limited to 3).
+      {% endcomment %}
       <div class="tii-features">
         {% for block in section.blocks %}
           <div class="tii-feature">
+            {% comment %} Feature Icon {% endcomment %}
             <div class="tii-feature-icon">
               <img
                 src="{{ block.settings.icon | img_url: 'small' }}"
@@ -26,6 +58,8 @@
                 height="200"
               >
             </div>
+
+            {% comment %} Feature Text Content {% endcomment %}
             <div class="tii-feature-text">
               <h3>{{ block.settings.heading }}</h3>
               <p>{{ block.settings.text }}</p>
@@ -34,9 +68,11 @@
         {% endfor %}
       </div>
 
+      {% comment %} Call to Action Button (Only renders if text is provided) {% endcomment %}
       {% if section.settings.button_text != blank %}
         <a href="{{ section.settings.button_link }}" class="tii-button">
           {{ section.settings.button_text }}
+          {% comment %} SVG Arrow Icon {% endcomment %}
           <svg width="20" height="20" viewBox="0 0 24 24">
             <path fill="{{ button_label }}" d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"/>
           </svg>
@@ -44,7 +80,6 @@
       {% endif %}
     </div>
 
-    <!-- RIGHT: IMAGE -->
     <div class="tii-image">
       <img
         src="{{ section.settings.main_image | img_url: 'master' }}"
@@ -55,23 +90,32 @@
     </div>
   </div>
 </section>
-{% comment %} Style for the section {% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  CSS STYLING
+  ------------------------------------------------------------------------------
+  Styles are scoped using the unique {{ section.id }} to allow multiple
+  instances of this section to have different settings (like padding).
+{% endcomment %}
 {%- style -%}
+  /* Wrapper Background */
   .tii-section {
     background-color: {{ background_color }};
   }
 
+  /* Main Flex Container */
   .text-icon-image-{{ section.id }} {
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
-    display: flex;
-    align-items: center;
-    gap: 60px;
-    max-width: {{section.settings.max_width}}px;
-    margin: 0 auto;
+    display: flex;       /* Creates the side-by-side layout */
+    align-items: center; /* Vertically centers content */
+    gap: 60px;           /* Space between text and image */
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;      /* Centers container on page */
   }
 
-  /* Image on the right */
+  /* Flex Children: Split width equally (1:1 ratio) */
   .text-icon-image-{{ section.id }} .tii-content {
     flex: 1;
   }
@@ -79,14 +123,15 @@
   .text-icon-image-{{ section.id }} .tii-image {
     flex: 1;
     border-radius: 20px;
-    overflow: hidden;
+    overflow: hidden; /* Ensures image doesn't bleed out of rounded corners */
   }
 
   .text-icon-image-{{ section.id }} .tii-image img {
     width: 100%;
-    display: block;
+    display: block; /* Removes default inline-image spacing issues */
   }
 
+  /* Typography */
   .text-icon-image-{{ section.id }} .tii-title {
     font-size: 36px;
     font-weight: 700;
@@ -94,21 +139,24 @@
     color: {{ text_color }};
   }
 
+  /* Feature List Layout */
   .text-icon-image-{{ section.id }} .tii-features {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Stacks features vertically */
     gap: 28px;
   }
 
+  /* Individual Feature Block */
   .text-icon-image-{{ section.id }} .tii-feature {
     display: flex;
     gap: 16px;
   }
 
+  /* Feature Icon Wrapper */
   .text-icon-image-{{ section.id }} .tii-feature-icon {
     width: 44px;
     height: 44px;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Prevents icon from squishing if text is long */
   }
 
   .text-icon-image-{{ section.id }} .tii-feature-icon img {
@@ -117,6 +165,7 @@
     object-fit: contain;
   }
 
+  /* Feature Text */
   .text-icon-image-{{ section.id }} .tii-feature-text h3 {
     font-size: 18px;
     font-weight: 600;
@@ -130,6 +179,7 @@
     color: {{ desc_text }};
   }
 
+  /* Button Styling */
   .text-icon-image-{{ section.id }} .tii-button {
     display: inline-flex;
     align-items: center;
@@ -146,22 +196,29 @@
 
   .text-icon-image-{{ section.id }} .tii-button:hover {
     opacity: 0.85;
-    transform: translateY(-2px);
+    transform: translateY(-2px); /* Subtle lift effect */
   }
 
+  /* Mobile Responsive Styles */
   @media screen and (max-width: 768px) {
     .text-icon-image-{{ section.id }} {
-      flex-direction: column-reverse;
+      flex-direction: column-reverse; /* Puts image on TOP, text on BOTTOM */
       gap: 40px;
     }
 
     .text-icon-image-{{ section.id }} .tii-content,
     .text-icon-image-{{ section.id }} .tii-image {
-      width: 100%;
+      width: 100%; /* Full width on mobile */
     }
   }
 {%- endstyle -%}
-{% comment %} Schema for the section {% endcomment %}
+
+{% comment %}
+  ------------------------------------------------------------------------------
+  SCHEMA SETTINGS
+  ------------------------------------------------------------------------------
+  Defines the editable options in the Shopify Theme Editor.
+{% endcomment %}
 {% schema %}
 {
   "name": "Text Icon Image",
@@ -173,7 +230,7 @@
       "max": 1800,
       "step": 10,
       "unit": "px",
-      "label": "Container",
+      "label": "Container Width",
       "default": 1320
     },
     {
@@ -194,21 +251,31 @@
       "label": "Padding Bottom",
       "default": 40
     },
-    { "type": "color_scheme", "id": "color_scheme", "label": "Color Scheme", "default": "scheme-1" },
-    { "type": "image_picker", "id": "main_image", "label": "Image" },
-    { "type": "text", "id": "title", "label": "Heading", "default": "This is Heading" },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    { "type": "image_picker", "id": "main_image", "label": "Right Side Image" },
+    { "type": "text", "id": "title", "label": "Main Heading", "default": "This is Heading" },
     { "type": "text", "id": "button_text", "label": "Button Label", "default": "SHOP NOW" },
     { "type": "url", "id": "button_link", "label": "Button Link" }
   ],
   "blocks": [
     {
       "type": "feature",
-      "name": "Feature",
+      "name": "Feature Block",
       "limit": 3,
       "settings": [
-        { "type": "image_picker", "id": "icon", "label": "Feature Icon" },
-        { "type": "text", "id": "heading", "label": "Heading", "default": "Card Title" },
-        { "type": "textarea", "id": "text", "label": "Text", "default": "Default description text goes here." }
+        { "type": "image_picker", "id": "icon", "label": "Feature Icon (Small)" },
+        { "type": "text", "id": "heading", "label": "Feature Title", "default": "Card Title" },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Feature Description",
+          "default": "Default description text goes here."
+        }
       ]
     }
   ],

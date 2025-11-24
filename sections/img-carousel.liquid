@@ -1,20 +1,30 @@
 {% comment %}
-  Image Carousel Section – All classes prefixed with ic-
+  ==============================================================================
+  SECTION: CUSTOM IMAGE CAROUSEL
+  ==============================================================================
+  Description:
+    A fully responsive, infinite-looping image carousel.
+    - Supports auto-play.
+    - Responsive: Shows 3 slides on Desktop, 2 on Tablet, 1 on Mobile.
+    - Uses 'cloning' logic in JS to create a seamless infinite loop.
 {% endcomment %}
 
 <div
   class="ic-section"
   id="ImageCarousel-{{ section.id }}"
+  {% comment %} Apply dynamic styles from Schema settings {% endcomment %}
   style="
     padding-top: {{ section.settings.padding_top }}px;
     padding-bottom: {{ section.settings.padding_bottom }}px;
-    background-color: {{ section.settings.background_color }};
-    color: {{ section.settings.text_color }};
+    background-color: {{ section.settings.color_scheme.settings.background }};
+    color: {{ section.settings.color_scheme.settings.text }};
   "
+  {% comment %} Data attributes used by JavaScript to read configuration {% endcomment %}
   data-autoplay="{{ section.settings.autoplay }}"
   data-speed="{{ section.settings.slide_speed | times: 1000 }}"
 >
-  <div class="ic-page-width">
+  <div class="ic-page-width" style="max-width: {{ section.settings.max_container }}px;">
+    {% comment %} --- Section Header (Title & Description) --- {% endcomment %}
     {% if section.settings.title != blank %}
       <h2 class="ic-title" style="color: {{ section.settings.text_color }};">
         {{ section.settings.title | escape }}
@@ -27,8 +37,10 @@
       </div>
     {% endif %}
 
+    {% comment %} --- Carousel Main Container --- {% endcomment %}
     <div class="ic-container">
-      <button type="button" class="ic-arrow ic-prev" aria-label="{{ 'general.slider.previous_slide' | t }}">
+      {% comment %} Previous Button {% endcomment %}
+      <button type="button" class="ic-arrow ic-prev" aria-label="Previous slide">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -44,6 +56,11 @@
         </svg>
       </button>
 
+      {% comment %}
+        Wrapper & Track:
+        The Wrapper hides the overflow.
+        The Track holds all slides and moves via CSS Transform.
+      {% endcomment %}
       <div class="ic-wrapper">
         <div class="ic-track">
           {% for block in section.blocks %}
@@ -51,6 +68,7 @@
               {% when 'slide' %}
                 <div class="ic-slide" {{ block.shopify_attributes }}>
                   <div class="ic-slide-inner">
+                    {% comment %} Image Rendering with Lazy Loading {% endcomment %}
                     {% if block.settings.image != blank %}
                       {{
                         block.settings.image
@@ -62,9 +80,11 @@
                           widths: '375, 550, 750, 1100, 1500, 2200'
                       }}
                     {% else %}
+                      {% comment %} Placeholder if no image is selected {% endcomment %}
                       {{ 'lifestyle-1' | placeholder_svg_tag: 'ic-image placeholder' }}
                     {% endif %}
 
+                    {% comment %} Text Overlay (Visible on Hover/Always on Mobile) {% endcomment %}
                     <div class="ic-caption">
                       {% if block.settings.title != blank %}
                         <h3 class="ic-slide-title">{{ block.settings.title | escape }}</h3>
@@ -81,7 +101,8 @@
         </div>
       </div>
 
-      <button type="button" class="ic-arrow ic-next" aria-label="{{ 'general.slider.next_slide' | t }}">
+      {% comment %} Next Button {% endcomment %}
+      <button type="button" class="ic-arrow ic-next" aria-label="Next slide">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -98,31 +119,40 @@
       </button>
     </div>
 
+    {% comment %} Pagination Dots {% endcomment %}
     <div class="ic-dots">
       {% for block in section.blocks %}
         <button
           class="ic-dot{% if forloop.first %} active{% endif %}"
           data-index="{{ forloop.index0 }}"
-          aria-label="{{ 'general.slider.slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ section.blocks.size }}"
+          aria-label="Slide {{ forloop.index }} of {{ section.blocks.size }}"
         ></button>
       {% endfor %}
     </div>
   </div>
 </div>
 
+{% comment %}
+  ==============================================================================
+  CSS STYLES
+  ==============================================================================
+{% endcomment %}
 <style>
   .ic-section {
     width: 100%;
     margin: 0 auto;
-    overflow: hidden;
+    overflow: hidden; /* Prevents horizontal scrollbars */
+    position: relative;
   }
   .ic-page-width {
-    max-width: 1400px;
+    max-width: {{ section.settings.max_container }}px;
     margin: 0 auto;
     padding: 0 20px;
   }
 
+  /* Typography */
   .ic-title {
+    color: {{ section.settings.color_scheme.settings.text }};
     text-align: center;
     margin-bottom: 1rem;
     font-size: 2.5rem;
@@ -138,6 +168,7 @@
     line-height: 1.6;
   }
 
+  /* Carousel Layout */
   .ic-container {
     position: relative;
     display: flex;
@@ -147,29 +178,34 @@
 
   .ic-wrapper {
     width: 100%;
-    overflow: hidden;
+    overflow: hidden; /* Hides slides that are out of view */
     position: relative;
   }
+
   .ic-track {
-    display: flex;
-    transition: transform 0.5s ease;
+    display: flex; /* Aligns slides horizontally */
+    /* will-change tells the browser to optimize for movement */
+    will-change: transform;
   }
 
   .ic-slide {
-    flex: 0 0 33.333%;
-    min-width: 33.333%;
-    padding: 0 10px;
+    /* CRITICAL: flex-shrink: 0 ensures slides don't get squished when the track is wider than the container.
+       If this is missing, the JS calculations will fail. */
+    flex-shrink: 0;
+    padding: 0 10px; /* Gutter between slides */
     box-sizing: border-box;
     transition: opacity 0.3s ease;
   }
 
+  /* Card Styling */
   .ic-slide-inner {
     position: relative;
     overflow: hidden;
     border-radius: 8px;
     height: 0;
-    padding-bottom: 75%;
+    padding-bottom: 75%; /* Aspect Ratio Hack (4:3) */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
   }
 
   .ic-image {
@@ -178,10 +214,15 @@
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover; /* Ensures image fills card without distortion */
     transition: transform 0.5s ease;
   }
+  .ic-image.placeholder {
+    object-fit: cover;
+    background-color: #e0e0e0;
+  }
 
+  /* Hover Effects & Overlay */
   .ic-caption {
     position: absolute;
     bottom: 0;
@@ -190,12 +231,14 @@
     padding: 20px;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
     color: #fff;
-    opacity: 0;
+    opacity: 0; /* Hidden by default */
     transform: translateY(20px);
     transition: opacity 0.3s ease, transform 0.3s ease;
-    pointer-events: none;
+    pointer-events: none; /* Allows clicks to pass through to image/link if needed */
+    z-index: 2;
   }
 
+  /* Show caption and zoom image on hover */
   .ic-slide-inner:hover .ic-caption {
     opacity: 1;
     transform: translateY(0);
@@ -208,14 +251,21 @@
     font-size: 1.25rem;
     margin-bottom: 0.5rem;
     font-weight: 600;
+    color: {{section.settings.color_scheme.settings.text }};
   }
   .ic-slide-description {
     font-size: 0.9rem;
     line-height: 1.4;
+    opacity: 0.9;
+    color:{{section.settings.color_scheme.settings.text }} ;
+  }
+  .ic-slide-description p {
+    margin: 0;
   }
 
+  /* Navigation Arrows */
   .ic-arrow {
-    background: rgba(255, 255, 255, 0.9);
+    background: {{section.settings.color_scheme.settings.button }};
     border: none;
     border-radius: 50%;
     width: 40px;
@@ -227,7 +277,8 @@
     z-index: 10;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     transition: background 0.3s ease, transform 0.3s ease;
-    color: #333;
+    color: {{section.settings.color_scheme.settings.button_label}};
+    flex-shrink: 0;
   }
 
   .ic-arrow:hover {
@@ -235,12 +286,13 @@
     transform: scale(1.1);
   }
   .ic-prev {
-    margin-right: 10px;
+    margin-right: 15px;
   }
   .ic-next {
-    margin-left: 10px;
+    margin-left: 15px;
   }
 
+  /* Pagination Dots */
   .ic-dots {
     display: flex;
     justify-content: center;
@@ -264,21 +316,14 @@
     transform: scale(1.2);
   }
 
+  /* Responsive Breakpoints */
   @media screen and (max-width: 989px) {
-    .ic-slide {
-      flex: 0 0 50%;
-      min-width: 50%;
-    }
     .ic-title {
       font-size: 2rem;
     }
   }
 
   @media screen and (max-width: 749px) {
-    .ic-slide {
-      flex: 0 0 100%;
-      min-width: 100%;
-    }
     .ic-title {
       font-size: 1.75rem;
     }
@@ -286,6 +331,7 @@
       font-size: 1rem;
       margin-bottom: 2rem;
     }
+    /* On Mobile: Always show caption, move arrows over image */
     .ic-caption {
       opacity: 1;
       transform: translateY(0);
@@ -306,52 +352,110 @@
   }
 </style>
 
+{% comment %}
+  ==============================================================================
+  JAVASCRIPT LOGIC
+  ==============================================================================
+{% endcomment %}
 <script>
   class ImageCarousel {
     constructor(container) {
+      // DOM Elements
       this.container = container;
       this.track = container.querySelector('.ic-track');
-      this.slides = Array.from(container.querySelectorAll('.ic-slide'));
+      this.originalSlides = Array.from(container.querySelectorAll('.ic-slide'));
       this.prevButton = container.querySelector('.ic-prev');
       this.nextButton = container.querySelector('.ic-next');
       this.dots = Array.from(container.querySelectorAll('.ic-dot'));
 
-      this.slideWidth = 100 / this.slides.length;
-      this.currentIndex = 0;
-      this.slidesToShow = this.getSlidesToShow();
+      // Configuration & State
+      this.totalOriginalSlides = this.originalSlides.length;
+
+      // CLONE COUNT: 3
+      // We clone 3 slides at the start and 3 at the end.
+      // This creates a "Buffer". Since we show up to 3 slides on desktop,
+      // we need at least 3 clones so the user never sees empty white space
+      // when looping from the last slide back to the first.
+      this.cloneCount = 3;
+
       this.autoplay = container.dataset.autoplay === 'true';
       this.autoplaySpeed = parseInt(container.dataset.speed) || 5000;
       this.autoplayTimeout = null;
-      this.isTransitioning = false;
+      this.isTransitioning = false; // Prevents spam clicking
 
+      // Start the carousel
+      this.init();
+    }
+
+    init() {
+      // 1. Create the clones for the infinite loop effect
       this.setupInfiniteLoop();
-      this.bindEvents();
-      this.updateCarousel();
 
+      // 2. Determine how many slides to show (Mobile vs Desktop)
+      this.slidesToShow = this.getSlidesToShow();
+
+      // 3. Set start position (We skip the first 3 clones to show the real first slide)
+      this.currentIndex = this.cloneCount;
+      this.updateCarousel(false); // false = No animation on initial load
+
+      // 4. Add Event Listeners (Clicks, Swipes, Resize)
+      this.bindEvents();
+
+      // 5. Start Autoplay if enabled
       if (this.autoplay) this.startAutoplay();
-      window.addEventListener('resize', this.handleResize.bind(this));
+
+      // 6. Listen for screen resize to adjust slides visible
+      window.addEventListener('resize', () => this.handleResize());
     }
 
     setupInfiniteLoop() {
-      const firstSlideClone = this.slides[0].cloneNode(true);
-      const lastSlideClone = this.slides[this.slides.length - 1].cloneNode(true);
-      this.track.appendChild(firstSlideClone);
-      this.track.insertBefore(lastSlideClone, this.track.firstChild);
-      this.slides = Array.from(this.container.querySelectorAll('.ic-slide'));
-      this.currentIndex = 1;
+      // Logic:
+      // Clones End -> prepended to Start
+      // Clones Start -> appended to End
+
+      // Create clones for the start (taken from the end of the original list)
+      const clonesStart = [];
+      for (let i = 0; i < this.cloneCount; i++) {
+        // Modulo operator (%) ensures we wrap around if total slides < cloneCount
+        const index = this.totalOriginalSlides - 1 - (i % this.totalOriginalSlides);
+        const clone = this.originalSlides[index].cloneNode(true);
+        clone.classList.add('ic-clone'); // Mark as clone for debugging
+        clone.setAttribute('aria-hidden', 'true'); // Hide from screen readers
+        clonesStart.unshift(clone);
+      }
+
+      // Create clones for the end (taken from the start of the original list)
+      const clonesEnd = [];
+      for (let i = 0; i < this.cloneCount; i++) {
+        const index = i % this.totalOriginalSlides;
+        const clone = this.originalSlides[index].cloneNode(true);
+        clone.classList.add('ic-clone');
+        clone.setAttribute('aria-hidden', 'true');
+        clonesEnd.push(clone);
+      }
+
+      // Insert clones into the DOM
+      clonesStart.forEach((clone) => this.track.insertBefore(clone, this.track.firstChild));
+      clonesEnd.forEach((clone) => this.track.appendChild(clone));
+
+      // Re-query the DOM to get the new list including clones
+      this.allSlides = Array.from(this.track.querySelectorAll('.ic-slide'));
     }
 
+    // Returns number of slides based on viewport width
     getSlidesToShow() {
-      if (window.innerWidth < 750) return 1;
-      if (window.innerWidth < 990) return 2;
-      return 3;
+      if (window.innerWidth < 750) return 1; // Mobile
+      if (window.innerWidth < 990) return 2; // Tablet
+      return 3; // Desktop
     }
 
     handleResize() {
       const newSlidesToShow = this.getSlidesToShow();
+      // Only update if the breakpoint changed
       if (newSlidesToShow !== this.slidesToShow) {
         this.slidesToShow = newSlidesToShow;
-        this.updateCarousel();
+        // Snap to current index immediately without animation to prevent layout shifts
+        this.updateCarousel(false);
       }
     }
 
@@ -360,32 +464,39 @@
       this.nextButton.addEventListener('click', () => this.goToNext());
 
       this.dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => this.goToSlide(index + 1));
+        dot.addEventListener('click', () => this.goToSlide(index));
       });
 
+      // Essential: Detects when the CSS transition finishes to handle the "Teleport" logic
       this.track.addEventListener('transitionend', () => this.handleTransitionEnd());
 
-      this.container.addEventListener('mouseenter', () => {
-        if (this.autoplay) this.stopAutoplay();
-      });
+      // Pause autoplay on mouse hover
+      this.container.addEventListener('mouseenter', () => this.stopAutoplay());
       this.container.addEventListener('mouseleave', () => {
         if (this.autoplay) this.startAutoplay();
       });
 
+      // Touch Swipe Logic (Mobile)
       let startX, endX;
-      const minSwipe = 50;
-      this.track.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX));
-      this.track.addEventListener('touchend', (e) => {
-        endX = e.changedTouches[0].clientX;
-        if (Math.abs(endX - startX) > minSwipe) {
-          endX > startX ? this.goToPrev() : this.goToNext();
-        }
-      });
+      this.track.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX), { passive: true });
+      this.track.addEventListener(
+        'touchend',
+        (e) => {
+          endX = e.changedTouches[0].clientX;
+          // Threshold of 50px for a valid swipe
+          if (Math.abs(endX - startX) > 50) {
+            endX > startX ? this.goToPrev() : this.goToNext();
+          }
+        },
+        { passive: true }
+      );
     }
 
     startAutoplay() {
+      this.stopAutoplay(); // Clear any existing timer
       this.autoplayTimeout = setInterval(() => this.goToNext(), this.autoplaySpeed);
     }
+
     stopAutoplay() {
       clearInterval(this.autoplayTimeout);
     }
@@ -395,70 +506,85 @@
       this.isTransitioning = true;
       this.currentIndex--;
       this.updateCarousel();
-      if (this.autoplay) {
-        this.stopAutoplay();
-        this.startAutoplay();
-      }
     }
+
     goToNext() {
       if (this.isTransitioning) return;
       this.isTransitioning = true;
       this.currentIndex++;
       this.updateCarousel();
-      if (this.autoplay) {
-        this.stopAutoplay();
-        this.startAutoplay();
-      }
     }
-    goToSlide(index) {
+
+    // Go to specific dot (index)
+    goToSlide(realIndex) {
       if (this.isTransitioning) return;
       this.isTransitioning = true;
-      this.currentIndex = index;
+      // We must add 'cloneCount' because the real slides start after the first set of clones
+      this.currentIndex = realIndex + this.cloneCount;
       this.updateCarousel();
-      if (this.autoplay) {
-        this.stopAutoplay();
-        this.startAutoplay();
-      }
     }
 
-    handleTransitionEnd() {
-      if (this.currentIndex === 0) {
-        this.track.style.transition = 'none';
-        this.currentIndex = this.slides.length - 2;
-        this.updateCarousel(false);
-      } else if (this.currentIndex === this.slides.length - 1) {
-        this.track.style.transition = 'none';
-        this.currentIndex = 1;
-        this.updateCarousel(false);
-      }
-      setTimeout(() => {
-        this.track.style.transition = 'transform 0.5s ease';
-        this.isTransitioning = false;
-      }, 10);
-    }
-
+    // Updates CSS to move the track
     updateCarousel(withTransition = true) {
-      const translateX = -this.currentIndex * (100 / this.slidesToShow);
-      this.track.style.transition = withTransition ? 'transform 0.5s ease' : 'none';
-      this.track.style.transform = `translateX(${translateX}%)`;
+      // 1. Calculate the width of each slide (percentage)
+      const slideWidth = 100 / this.slidesToShow;
 
-      this.slides.forEach((slide) => {
-        slide.style.flex = `0 0 ${100 / this.slidesToShow}%`;
-        slide.style.minWidth = `${100 / this.slidesToShow}%`;
+      // Update flex-basis for all slides
+      this.allSlides.forEach((slide) => {
+        slide.style.flex = `0 0 ${slideWidth}%`;
+        slide.style.width = `${slideWidth}%`;
       });
 
+      // 2. Apply CSS Transition (or remove it for instant snapping)
+      this.track.style.transition = withTransition ? 'transform 0.5s ease' : 'none';
+
+      // 3. Move the track
+      const translateX = -(this.currentIndex * slideWidth);
+      this.track.style.transform = `translateX(${translateX}%)`;
+
+      // 4. Update the active dot state
       this.updateDots();
     }
 
-    updateDots() {
-      let realIndex = this.currentIndex - 1;
-      if (realIndex < 0) realIndex = this.dots.length - 1;
-      if (realIndex >= this.dots.length) realIndex = 0;
+    // This is the "Magic" behind the infinite loop
+    handleTransitionEnd() {
+      this.isTransitioning = false;
 
-      this.dots.forEach((dot, i) => dot.classList.toggle('active', i === realIndex));
+      // Calculate boundaries
+      const firstRealIndex = this.cloneCount;
+      const lastRealIndex = this.cloneCount + this.totalOriginalSlides;
+
+      // SCENARIO 1: User scrolled PAST the last real slide into the end clones
+      if (this.currentIndex >= lastRealIndex) {
+        // Teleport back to the start (first real slide)
+        // Calculate the offset to maintain smooth movement if user clicked fast
+        const offset = this.currentIndex - lastRealIndex;
+        this.currentIndex = firstRealIndex + offset;
+        this.updateCarousel(false); // 'false' disables animation for the teleport
+      }
+      // SCENARIO 2: User scrolled BEFORE the first real slide into the start clones
+      else if (this.currentIndex < firstRealIndex) {
+        // Teleport to the end (last real slide)
+        const offset = firstRealIndex - this.currentIndex;
+        this.currentIndex = lastRealIndex - offset;
+        this.updateCarousel(false);
+      }
+    }
+
+    updateDots() {
+      // Calculate the 'real' index relative to the original slides, ignoring clones
+      let realIndex = (this.currentIndex - this.cloneCount) % this.totalOriginalSlides;
+
+      // Handle negative indices (when in start clones)
+      if (realIndex < 0) realIndex += this.totalOriginalSlides;
+
+      this.dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === realIndex);
+      });
     }
   }
 
+  // Initialize carousel when DOM is ready
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[id^="ImageCarousel-"]').forEach((carousel) => {
       new ImageCarousel(carousel);
@@ -466,19 +592,28 @@
   });
 </script>
 
+{% comment %}
+  ==============================================================================
+  SHOPIFY SCHEMA (Theme Editor Settings)
+  ==============================================================================
+{% endcomment %}
 {% schema %}
 {
-  "name": "Custom Image Carousel",
+  "name": "Image Carousel Slider",
   "tag": "section",
   "class": "section",
   "settings": [
-    { "type": "text", "id": "title", "label": "Heading", "default": "Styles for Every Home" },
     {
-      "type": "richtext",
-      "id": "description",
-      "label": "Description",
-      "default": "<p>From modern to traditional, our pieces are tailored to match your style and space</p>"
+      "type": "range",
+      "id": "max_container",
+      "min": 1100,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "label": "Container",
+      "default": 1320
     },
+
     {
       "type": "range",
       "id": "padding_top",
@@ -499,8 +634,19 @@
       "label": "Bottom Padding",
       "default": 60
     },
-    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#ffffff" },
-    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#333333" },
+    { "type": "text", "id": "title", "label": "Heading", "default": "Styles for Every Home" },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>From modern to traditional, our pieces are tailored to match your style and space</p>"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
     { "type": "checkbox", "id": "autoplay", "label": "Auto-play slides", "default": true },
     {
       "type": "range",
@@ -531,7 +677,8 @@
   ],
   "presets": [
     {
-      "name": "Custom Image Carousel",
+      "name": "Image Carousel Slider",
+      "category": "Custom",
       "blocks": [
         {
           "type": "slide",
@@ -547,6 +694,10 @@
         {
           "type": "slide",
           "settings": { "title": "Contemporary Living", "description": "<p>Modern comfort for everyday life</p>" }
+        },
+        {
+          "type": "slide",
+          "settings": { "title": "Modern Kitchen", "description": "<p>Functional and beautiful spaces</p>" }
         }
       ]
     }
