@@ -8,7 +8,9 @@
 {% assign card_text = section.settings.card_color_scheme.settings.text %}
 {% assign card_button_bg = section.settings.card_color_scheme.settings.button_background %}
 {% assign card_button_text = section.settings.card_color_scheme.settings.button_label %}
-<div
+
+{% comment %} Html skeleton for the section  {% endcomment %}
+<section
   class="du-product-slider-section"
   style="
     padding-top: {{ section.settings.padding_top }}px;
@@ -89,7 +91,7 @@
       </div>
     </div>
   </div>
-</div>
+</section>
 
 <style>
   .du-product-slider-section {

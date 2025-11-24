@@ -44,6 +44,17 @@
             {% if section.settings.show_payment_icons %}
               {% render 'payment-icons', section: section %}
             {% endif %}
+            {% comment %} custom payments icons  {% endcomment %}
+            {% if section.settings.custom_payment_icons %}
+              {% assign custom_payments = section.settings.custom_payment_providers | split: ',' %}
+              {% for provider in custom_payments %}
+                {% assign provider_name = provider | strip | downcase | replace: ' ', '-' %}
+                <li class="list_payment_method" style="list-style: none;">
+                  {{ provider_name | payment_type_svg_tag: class: 'icon icon--full-color' }}
+                </li>
+              {% endfor %}
+            {% endif %}
+            {% comment %} custom payments icons  {% endcomment %}
             {% if section.settings.footer_bottom_menu != blank %}
               {% assign menu = section.settings.footer_bottom_menu %}
               <ul class="m-footer--bottom-menu m-link-lists m-link-lists--inline xl:m:justify-end{% if section.settings.show_menu_item_divider %} show-menu-item-divider{% endif %}">

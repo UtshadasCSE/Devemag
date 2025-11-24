@@ -1,0 +1,555 @@
+{% comment %}
+  Image Carousel Section – All classes prefixed with ic-
+{% endcomment %}
+
+<div
+  class="ic-section"
+  id="ImageCarousel-{{ section.id }}"
+  style="
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
+  "
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.slide_speed | times: 1000 }}"
+>
+  <div class="ic-page-width">
+    {% if section.settings.title != blank %}
+      <h2 class="ic-title" style="color: {{ section.settings.text_color }};">
+        {{ section.settings.title | escape }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.description != blank %}
+      <div class="ic-description" style="color: {{ section.settings.text_color }};">
+        {{ section.settings.description }}
+      </div>
+    {% endif %}
+
+    <div class="ic-container">
+      <button type="button" class="ic-arrow ic-prev" aria-label="{{ 'general.slider.previous_slide' | t }}">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="ic-wrapper">
+        <div class="ic-track">
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'slide' %}
+                <div class="ic-slide" {{ block.shopify_attributes }}>
+                  <div class="ic-slide-inner">
+                    {% if block.settings.image != blank %}
+                      {{
+                        block.settings.image
+                        | image_url: width: 800
+                        | image_tag:
+                          loading: 'lazy',
+                          class: 'ic-image',
+                          sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw',
+                          widths: '375, 550, 750, 1100, 1500, 2200'
+                      }}
+                    {% else %}
+                      {{ 'lifestyle-1' | placeholder_svg_tag: 'ic-image placeholder' }}
+                    {% endif %}
+
+                    <div class="ic-caption">
+                      {% if block.settings.title != blank %}
+                        <h3 class="ic-slide-title">{{ block.settings.title | escape }}</h3>
+                      {% endif %}
+
+                      {% if block.settings.description != blank %}
+                        <div class="ic-slide-description">{{ block.settings.description }}</div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <button type="button" class="ic-arrow ic-next" aria-label="{{ 'general.slider.next_slide' | t }}">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </div>
+
+    <div class="ic-dots">
+      {% for block in section.blocks %}
+        <button
+          class="ic-dot{% if forloop.first %} active{% endif %}"
+          data-index="{{ forloop.index0 }}"
+          aria-label="{{ 'general.slider.slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ section.blocks.size }}"
+        ></button>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .ic-section {
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  .ic-page-width {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .ic-title {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    font-weight: 600;
+    font-family: serif;
+  }
+
+  .ic-description {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .ic-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .ic-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .ic-track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .ic-slide {
+    flex: 0 0 33.333%;
+    min-width: 33.333%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    transition: opacity 0.3s ease;
+  }
+
+  .ic-slide-inner {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    height: 0;
+    padding-bottom: 75%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .ic-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .ic-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    color: #fff;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .ic-slide-inner:hover .ic-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .ic-slide-inner:hover .ic-image {
+    transform: scale(1.05);
+  }
+
+  .ic-slide-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+  }
+  .ic-slide-description {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .ic-arrow {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: background 0.3s ease, transform 0.3s ease;
+    color: #333;
+  }
+
+  .ic-arrow:hover {
+    background: #fff;
+    transform: scale(1.1);
+  }
+  .ic-prev {
+    margin-right: 10px;
+  }
+  .ic-next {
+    margin-left: 10px;
+  }
+
+  .ic-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .ic-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ddd;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .ic-dot.active {
+    background-color: #333;
+    transform: scale(1.2);
+  }
+
+  @media screen and (max-width: 989px) {
+    .ic-slide {
+      flex: 0 0 50%;
+      min-width: 50%;
+    }
+    .ic-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ic-slide {
+      flex: 0 0 100%;
+      min-width: 100%;
+    }
+    .ic-title {
+      font-size: 1.75rem;
+    }
+    .ic-description {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+    .ic-caption {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .ic-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .ic-prev {
+      left: 10px;
+      margin-right: 0;
+    }
+    .ic-next {
+      right: 10px;
+      margin-left: 0;
+    }
+  }
+</style>
+
+<script>
+  class ImageCarousel {
+    constructor(container) {
+      this.container = container;
+      this.track = container.querySelector('.ic-track');
+      this.slides = Array.from(container.querySelectorAll('.ic-slide'));
+      this.prevButton = container.querySelector('.ic-prev');
+      this.nextButton = container.querySelector('.ic-next');
+      this.dots = Array.from(container.querySelectorAll('.ic-dot'));
+
+      this.slideWidth = 100 / this.slides.length;
+      this.currentIndex = 0;
+      this.slidesToShow = this.getSlidesToShow();
+      this.autoplay = container.dataset.autoplay === 'true';
+      this.autoplaySpeed = parseInt(container.dataset.speed) || 5000;
+      this.autoplayTimeout = null;
+      this.isTransitioning = false;
+
+      this.setupInfiniteLoop();
+      this.bindEvents();
+      this.updateCarousel();
+
+      if (this.autoplay) this.startAutoplay();
+      window.addEventListener('resize', this.handleResize.bind(this));
+    }
+
+    setupInfiniteLoop() {
+      const firstSlideClone = this.slides[0].cloneNode(true);
+      const lastSlideClone = this.slides[this.slides.length - 1].cloneNode(true);
+      this.track.appendChild(firstSlideClone);
+      this.track.insertBefore(lastSlideClone, this.track.firstChild);
+      this.slides = Array.from(this.container.querySelectorAll('.ic-slide'));
+      this.currentIndex = 1;
+    }
+
+    getSlidesToShow() {
+      if (window.innerWidth < 750) return 1;
+      if (window.innerWidth < 990) return 2;
+      return 3;
+    }
+
+    handleResize() {
+      const newSlidesToShow = this.getSlidesToShow();
+      if (newSlidesToShow !== this.slidesToShow) {
+        this.slidesToShow = newSlidesToShow;
+        this.updateCarousel();
+      }
+    }
+
+    bindEvents() {
+      this.prevButton.addEventListener('click', () => this.goToPrev());
+      this.nextButton.addEventListener('click', () => this.goToNext());
+
+      this.dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => this.goToSlide(index + 1));
+      });
+
+      this.track.addEventListener('transitionend', () => this.handleTransitionEnd());
+
+      this.container.addEventListener('mouseenter', () => {
+        if (this.autoplay) this.stopAutoplay();
+      });
+      this.container.addEventListener('mouseleave', () => {
+        if (this.autoplay) this.startAutoplay();
+      });
+
+      let startX, endX;
+      const minSwipe = 50;
+      this.track.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX));
+      this.track.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        if (Math.abs(endX - startX) > minSwipe) {
+          endX > startX ? this.goToPrev() : this.goToNext();
+        }
+      });
+    }
+
+    startAutoplay() {
+      this.autoplayTimeout = setInterval(() => this.goToNext(), this.autoplaySpeed);
+    }
+    stopAutoplay() {
+      clearInterval(this.autoplayTimeout);
+    }
+
+    goToPrev() {
+      if (this.isTransitioning) return;
+      this.isTransitioning = true;
+      this.currentIndex--;
+      this.updateCarousel();
+      if (this.autoplay) {
+        this.stopAutoplay();
+        this.startAutoplay();
+      }
+    }
+    goToNext() {
+      if (this.isTransitioning) return;
+      this.isTransitioning = true;
+      this.currentIndex++;
+      this.updateCarousel();
+      if (this.autoplay) {
+        this.stopAutoplay();
+        this.startAutoplay();
+      }
+    }
+    goToSlide(index) {
+      if (this.isTransitioning) return;
+      this.isTransitioning = true;
+      this.currentIndex = index;
+      this.updateCarousel();
+      if (this.autoplay) {
+        this.stopAutoplay();
+        this.startAutoplay();
+      }
+    }
+
+    handleTransitionEnd() {
+      if (this.currentIndex === 0) {
+        this.track.style.transition = 'none';
+        this.currentIndex = this.slides.length - 2;
+        this.updateCarousel(false);
+      } else if (this.currentIndex === this.slides.length - 1) {
+        this.track.style.transition = 'none';
+        this.currentIndex = 1;
+        this.updateCarousel(false);
+      }
+      setTimeout(() => {
+        this.track.style.transition = 'transform 0.5s ease';
+        this.isTransitioning = false;
+      }, 10);
+    }
+
+    updateCarousel(withTransition = true) {
+      const translateX = -this.currentIndex * (100 / this.slidesToShow);
+      this.track.style.transition = withTransition ? 'transform 0.5s ease' : 'none';
+      this.track.style.transform = `translateX(${translateX}%)`;
+
+      this.slides.forEach((slide) => {
+        slide.style.flex = `0 0 ${100 / this.slidesToShow}%`;
+        slide.style.minWidth = `${100 / this.slidesToShow}%`;
+      });
+
+      this.updateDots();
+    }
+
+    updateDots() {
+      let realIndex = this.currentIndex - 1;
+      if (realIndex < 0) realIndex = this.dots.length - 1;
+      if (realIndex >= this.dots.length) realIndex = 0;
+
+      this.dots.forEach((dot, i) => dot.classList.toggle('active', i === realIndex));
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[id^="ImageCarousel-"]').forEach((carousel) => {
+      new ImageCarousel(carousel);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Image Carousel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "title", "label": "Heading", "default": "Styles for Every Home" },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>From modern to traditional, our pieces are tailored to match your style and space</p>"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 150,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+    { "type": "color", "id": "background_color", "label": "Background Color", "default": "#ffffff" },
+    { "type": "color", "id": "text_color", "label": "Text Color", "default": "#333333" },
+    { "type": "checkbox", "id": "autoplay", "label": "Auto-play slides", "default": true },
+    {
+      "type": "range",
+      "id": "slide_speed",
+      "min": 3,
+      "max": 9,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Image Title" },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Add a short description about this image</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Image Carousel",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "title": "Elegant Dining",
+            "description": "<p>Gather in style with solid wood craftsmanship</p>"
+          }
+        },
+        {
+          "type": "slide",
+          "settings": { "title": "Serene Bedrooms", "description": "<p>Create your perfect sanctuary</p>" }
+        },
+        {
+          "type": "slide",
+          "settings": { "title": "Contemporary Living", "description": "<p>Modern comfort for everyday life</p>" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

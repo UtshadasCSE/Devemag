@@ -65,7 +65,7 @@
     {% endif %}
   </div>
 </section>
-
+{% comment %} Style for the section  {% endcomment %}
 <style>
   .fc-product-cards-section {
     padding: {{ section.settings.padding_top }}px 20px {{ section.settings.padding_bottom }}px;
@@ -331,7 +331,7 @@
     }
   }
 </style>
-
+{% comment %} Schema for the section {% endcomment %}
 {% schema %}
 {
   "name": "Featured Cards",

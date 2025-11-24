@@ -1,7 +1,6 @@
 {% comment %}
   Get color values from the color scheme
 {% endcomment %}
-
 {% assign background_color = section.settings.color_scheme.settings.background %}
 {% assign text_color = section.settings.color_scheme.settings.text %}
 {% assign sub_heading_color = section.settings.color_scheme.settings.subtext %}
@@ -9,6 +8,54 @@
 {% assign button_label = section.settings.color_scheme.settings.button_label %}
 {% assign desc_text = section.settings.color_scheme.settings.heading_text %}
 
+{% comment %} Html skeleton for the section {% endcomment %}
+<section class="tii-section">
+  <div class="text-icon-image-{{ section.id }}">
+    <!-- LEFT: TEXT CONTENT -->
+    <div class="tii-content">
+      <h2 class="tii-title">{{ section.settings.title }}</h2>
+
+      <div class="tii-features">
+        {% for block in section.blocks %}
+          <div class="tii-feature">
+            <div class="tii-feature-icon">
+              <img
+                src="{{ block.settings.icon | img_url: 'small' }}"
+                alt="{{ block.settings.heading | escape }}"
+                width="200"
+                height="200"
+              >
+            </div>
+            <div class="tii-feature-text">
+              <h3>{{ block.settings.heading }}</h3>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="tii-button">
+          {{ section.settings.button_text }}
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path fill="{{ button_label }}" d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: IMAGE -->
+    <div class="tii-image">
+      <img
+        src="{{ section.settings.main_image | img_url: 'master' }}"
+        alt="{{ section.settings.main_image.alt | escape }}"
+        width="400"
+        height="400"
+      >
+    </div>
+  </div>
+</section>
+{% comment %} Style for the section {% endcomment %}
 {%- style -%}
   .tii-section {
     background-color: {{ background_color }};
@@ -114,54 +161,7 @@
     }
   }
 {%- endstyle -%}
-
-<section class="tii-section">
-  <div class="text-icon-image-{{ section.id }}">
-    <!-- LEFT: TEXT CONTENT -->
-    <div class="tii-content">
-      <h2 class="tii-title">{{ section.settings.title }}</h2>
-
-      <div class="tii-features">
-        {% for block in section.blocks %}
-          <div class="tii-feature">
-            <div class="tii-feature-icon">
-              <img
-                src="{{ block.settings.icon | img_url: 'small' }}"
-                alt="{{ block.settings.heading | escape }}"
-                width="200"
-                height="200"
-              >
-            </div>
-            <div class="tii-feature-text">
-              <h3>{{ block.settings.heading }}</h3>
-              <p>{{ block.settings.text }}</p>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-
-      {% if section.settings.button_text != blank %}
-        <a href="{{ section.settings.button_link }}" class="tii-button">
-          {{ section.settings.button_text }}
-          <svg width="20" height="20" viewBox="0 0 24 24">
-            <path fill="{{ button_label }}" d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"/>
-          </svg>
-        </a>
-      {% endif %}
-    </div>
-
-    <!-- RIGHT: IMAGE -->
-    <div class="tii-image">
-      <img
-        src="{{ section.settings.main_image | img_url: 'master' }}"
-        alt="{{ section.settings.main_image.alt | escape }}"
-        width="400"
-        height="400"
-      >
-    </div>
-  </div>
-</section>
-
+{% comment %} Schema for the section {% endcomment %}
 {% schema %}
 {
   "name": "Text Icon Image",

@@ -1,0 +1,367 @@
+{% comment %} Features with Image – Optimized + fwi- prefix {% endcomment %}
+
+<section class="fwi-section">
+  <div class="fwi-container">
+    <div class="fwi-content">
+      <h2 class="fwi-heading">{{ section.settings.heading }}</h2>
+      <p class="fwi-subheading">{{ section.settings.subheading }}</p>
+
+      <div class="fwi-grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'feature' %}
+            <div class="fwi-item" {{ block.shopify_attributes }}>
+              <div class="fwi-icon">
+                {% if block.settings.icon_image %}
+                  <img
+                    src="{{ block.settings.icon_image | img_url: '120x' }}"
+                    alt="{{ block.settings.title }}"
+                    loading="lazy"
+                    width="56"
+                    height="56"
+                  >
+                {% else %}
+                  <div class="fwi-icon-placeholder"></div>
+                {% endif %}
+              </div>
+              <div class="fwi-text">
+                <h3 class="fwi-title">{{ block.settings.title }}</h3>
+                <p class="fwi-description">{{ block.settings.description }}</p>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      {% if section.settings.button_text != blank %}
+        <a href="{{ section.settings.button_link }}" class="fwi-cta">
+          {{ section.settings.button_text }}
+        </a>
+      {% endif %}
+
+      <div class="fwi-benefits">
+        {% for block in section.blocks %}
+          {% if block.type == 'benefit' %}
+            <div class="fwi-benefit-item" {{ block.shopify_attributes }}>
+              <div class="fwi-benefit-icon">
+                {% if block.settings.icon_image %}
+                  <img
+                    src="{{ block.settings.icon_image | img_url: '80x' }}"
+                    alt="{{ block.settings.text }}"
+                    loading="lazy"
+                    width="36"
+                    height="36"
+                  >
+                {% else %}
+                  <div class="fwi-benefit-placeholder"></div>
+                {% endif %}
+              </div>
+              <span>{{ block.settings.text }}</span>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="fwi-image-container">
+      {% if section.settings.image %}
+        {{
+          section.settings.image
+          | image_url: width: 1000
+          | image_tag: class: 'fwi-image', loading: 'lazy', alt: section.settings.heading
+        }}
+      {% else %}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'fwi-image' }}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .fwi-section {
+    background: {{ section.settings.color_scheme.settings.background }};
+    padding: {{ section.settings.padding_top }}px 20px {{ section.settings.padding_bottom }}px;
+
+  }
+
+  .fwi-container {
+    max-width: {{ section.settings.max_container }}px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+  }
+
+  @media (min-width: 768px) {
+    .fwi-container {
+      flex-direction: row;
+      align-items: center;
+      gap: 80px;
+    }
+  }
+
+  .fwi-content { flex: 1; }
+  .fwi-image-container {
+    flex: 1;
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .fwi-image { width: 100%; height: auto; display: block; }
+
+  .fwi-heading {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: {{ section.settings.color_scheme.settings.text }};
+    margin-bottom: 16px;
+  }
+
+  .fwi-subheading {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+    color: {{ section.settings.color_scheme.settings.text }};
+    opacity: 0.9;
+  }
+
+  .fwi-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+
+  @media (min-width: 768px) {
+    .fwi-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .fwi-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .fwi-icon {
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .fwi-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+  }
+
+  .fwi-icon-placeholder,
+  .fwi-benefit-placeholder {
+    width: 100%;
+    height: 100%;
+    background: {{ section.settings.color_scheme.settings.text }}20;
+    border-radius: inherit;
+  }
+
+  .fwi-benefit-placeholder {
+    border-radius: 50%;
+  }
+
+  .fwi-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: {{ section.settings.color_scheme.settings.text }};
+    margin-bottom: 8px;
+  }
+
+  .fwi-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: {{ section.settings.color_scheme.settings.text }};
+    opacity: 0.9;
+  }
+
+  .fwi-cta {
+    display: inline-block;
+    background: {{ section.settings.color_scheme.settings.button }};
+    color: {{ section.settings.color_scheme.settings.button_label }};
+    font-weight: 700;
+    font-size: 17px;
+    padding: 18px 44px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-bottom: 48px;
+  }
+
+  .fwi-cta:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  }
+
+  .fwi-benefits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+
+  .fwi-benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: {{ section.settings.color_scheme.settings.text }};
+    opacity: 0.9;
+  }
+
+  .fwi-benefit-icon {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fwi-benefit-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Features with Image",
+  "settings": [
+    {
+      "type": "range",
+      "id": "max_container",
+      "min": 1100,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "label": "Container",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 80
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Because confidence starts here"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Over 900,000+ men have already made the switch."
+    },
+
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button label",
+      "default": "MAKE THE SWITCH NOW"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature Item",
+      "limit": 8,
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Icon" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Powerful Feature" },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Explain why this feature matters and how it helps your customers."
+        }
+      ]
+    },
+    {
+      "type": "benefit",
+      "name": "Quick Benefit",
+      "limit": 6,
+      "settings": [
+        { "type": "image_picker", "id": "icon_image", "label": "Icon / Image" },
+        { "type": "text", "id": "text", "label": "Benefit Text", "default": "Free Shipping Worldwide" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features with Image",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Full Spectrum Support",
+            "description": "Supports stronger, fuller-looking hair from root to tip."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "title": "Patented Actives",
+            "description": "Clinically proven ingredients that actually work."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": { "title": "Hormone-Safe", "description": "Won’t affect testosterone or cause side effects." }
+        },
+        {
+          "type": "feature",
+          "settings": { "title": "No Residue", "description": "Clean formula, zero greasiness or flaking." }
+        },
+        { "type": "benefit", "settings": { "text": "2–5 Day Delivery" } },
+        { "type": "benefit", "settings": { "text": "60-Day Money Back Guarantee" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
