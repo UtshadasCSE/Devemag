@@ -105,10 +105,53 @@
         "pause_on_hover": true
       }
     },
+    "rich_text_Lt7fnR": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_btwHVM": {
+          "type": "heading",
+          "settings": {
+            "heading": "Talk about your brand",
+            "heading_size": "h2"
+          }
+        },
+        "text_WijrxN": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post.<br/> Add details on availability, style, or even provide a review.</p>"
+          }
+        },
+        "button_JzdNWF": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Collection",
+            "button_link": "",
+            "button_style": "m-button--link",
+            "button_size": ""
+          }
+        }
+      },
+      "block_order": [
+        "heading_btwHVM",
+        "text_WijrxN",
+        "button_JzdNWF"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "container": "container",
+        "color_scheme": "footer",
+        "content_alignment": "center",
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "custom_class": "",
+        "animations": "inherit"
+      }
+    },
     "text_with_carousel_8fhweb": {
       "type": "text-product-slider",
       "name": "Text With Slider",
       "settings": {
+        "max_container": 1320,
         "small_heading": "Our Trending Shoe",
         "main_heading": "Most Popular Products",
         "description": "Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit",
@@ -174,6 +217,7 @@
       ],
       "name": "Featured Cards",
       "settings": {
+        "max_container": 1320,
         "padding_top": 60,
         "padding_bottom": 60,
         "section_color_scheme": "footer"
@@ -214,22 +258,125 @@
       ],
       "name": "Text Icon Image",
       "settings": {
-        "max_width": 1330,
+        "max_width": 1320,
         "padding_top": 60,
         "padding_bottom": 60,
         "color_scheme": "dark",
-        "main_image": "shopify://shop_images/Untitled_design_76.png",
+        "main_image": "shopify://shop_images/1741512262804-Strides_EID2_3-3-2.png",
         "title": "This is Heading",
         "button_text": "SHOP NOW",
         "button_link": ""
+      }
+    },
+    "img_carousel_4CePMP": {
+      "type": "img-carousel",
+      "blocks": {
+        "slide_bAnnjT": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/download_72.png",
+            "title": "Image Title",
+            "description": "<p>Add a short description about this image</p>"
+          }
+        },
+        "slide_TeQfMp": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/download_74.png",
+            "title": "Imaghhhe Title",
+            "description": "<p>Add a short description about this image</p>"
+          }
+        },
+        "slide_FkBtR8": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/download_73.png",
+            "title": "Image Title",
+            "description": "<p>Add a short description about this image</p>"
+          }
+        }
+      },
+      "block_order": [
+        "slide_bAnnjT",
+        "slide_TeQfMp",
+        "slide_FkBtR8"
+      ],
+      "name": "Custom Image Carousel",
+      "settings": {
+        "max_container": 1320,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "title": "Styles for Every Home",
+        "description": "<p>From modern to traditional, our pieces are tailored to match your style and space</p>",
+        "color_scheme": "footer",
+        "autoplay": true,
+        "slide_speed": 5
+      }
+    },
+    "icon_category_tab_Cbr7mG": {
+      "type": "icon-category-tab",
+      "blocks": {
+        "category_tab_THh8Uq": {
+          "type": "category_tab",
+          "settings": {
+            "icon_text": "😂",
+            "label": "Funny",
+            "collection": "dress"
+          }
+        },
+        "category_tab_WxfmAw": {
+          "type": "category_tab",
+          "settings": {
+            "icon_text": "👺",
+            "label": "Anime",
+            "collection": "men"
+          }
+        },
+        "category_tab_rkt8GG": {
+          "type": "category_tab",
+          "settings": {
+            "icon_text": "😍",
+            "label": "Pop Culture",
+            "collection": "shoes"
+          }
+        },
+        "category_tab_cTVQjn": {
+          "type": "category_tab",
+          "settings": {
+            "icon_text": "🎮",
+            "label": "Gaming",
+            "collection": "women"
+          }
+        }
+      },
+      "block_order": [
+        "category_tab_THh8Uq",
+        "category_tab_WxfmAw",
+        "category_tab_rkt8GG",
+        "category_tab_cTVQjn"
+      ],
+      "name": "Custom Category Tabs",
+      "settings": {
+        "max_container": 1320,
+        "padding_top": 60,
+        "padding_bottom": 60,
+        "section_title": "Shop By Category",
+        "products_to_show": 4,
+        "show_shop_all_button": true,
+        "shop_all_text": "Shop All",
+        "shop_all_url": "",
+        "color_scheme": ""
       }
     }
   },
   "order": [
     "1621243260e1af0c20",
     "marquee_slider_FrCYc3",
+    "rich_text_Lt7fnR",
     "text_with_carousel_8fhweb",
     "featured_cards_qRLKnr",
-    "text_icon_image_NJAhMG"
+    "text_icon_image_NJAhMG",
+    "img_carousel_4CePMP",
+    "icon_category_tab_Cbr7mG"
   ]
 }
