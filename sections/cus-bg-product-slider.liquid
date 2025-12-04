@@ -1,0 +1,619 @@
+{% comment %}
+  ================================================================================
+    PRODUCT SHOWCASE SECTION – FULLY COMMENTED FOR DEVELOPERS
+  ================================================================================
+  This is a custom Shopify section that displays a beautiful full-width product
+  carousel/slider with background image, overlay, navigation arrows, pagination
+  dots, touch/swipe support, and full responsiveness.
+
+  Features:
+  - Background image with dark overlay
+  - Collection-based product loop
+  - Sale badges, proper pricing (with compare-at-price)
+  - Hover effects, image zoom, card lift
+  - Smooth scroll + arrow navigation + pagination dots
+  - Mobile touch swipe support
+  - Fully customizable via theme editor
+  ================================================================================
+{% endcomment %}
+
+<section
+  class="bwps-product-showcase"
+  {% if section.settings.background_image %}
+    style="background-image: url('{{ section.settings.background_image | img_url: '2000x' }}')"
+  {% endif %}
+>
+  <!-- Dark overlay layer for better text readability on background images -->
+  <div class="bwps-product-showcase__container">
+    <!-- Optional section title (configurable in theme editor) -->
+    {% if section.settings.title != blank %}
+      <h2 class="bwps-product-showcase__title">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <!-- Fetch the selected collection -->
+    {% assign collection = collections[section.settings.collection] %}
+
+    <!-- Only render slider if collection exists and has products -->
+    {% if collection and collection.products.size > 0 %}
+      <div class="bwps-product-slider" data-slider>
+        <!-- PREV ARROW BUTTON -->
+        <button
+          class="bwps-slider-arrow bwps-slider-arrow--prev"
+          aria-label="Previous product"
+          data-prev
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- SCROLLABLE PRODUCT TRACK (horizontal flex container) -->
+        <div class="bwps-product-slider__track" data-track>
+          {% for product in collection.products limit: section.settings.products_limit %}
+            <article class="bwps-product-slide">
+              <!-- Image wrapper maintains 1:1 aspect ratio -->
+              <div class="bwps-product-slide__image-wrapper">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | img_url: '400x400', crop: 'center' }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    class="bwps-product-slide__image"
+                    loading="lazy"
+                    width="400"
+                    height="400"
+                  >
+                {% else %}
+                  <!-- Fallback placeholder if no image -->
+                  {{ 'product-1' | placeholder_svg_tag: 'bwps-product-slide__image' }}
+                {% endif %}
+
+                <!-- SALE BADGE – appears only when compare_at_price > price -->
+                {% if product.compare_at_price > product.price %}
+                  <span class="bwps-product-slide__badge">Sale</span>
+                {% endif %}
+              </div>
+
+              <!-- Product title -->
+              <h3 class="bwps-product-slide__title">{{ product.title }}</h3>
+
+              <!-- Pricing: current price + strikethrough original price if on sale -->
+              <div class="bwps-product-slide__price-wrapper">
+                <span class="bwps-product-slide__price">
+                  {{ product.price | money }}
+                </span>
+                {% if product.compare_at_price > product.price %}
+                  <span class="bwps-product-slide__compare-price">
+                    {{ product.compare_at_price | money }}
+                  </span>
+                {% endif %}
+              </div>
+
+              <!-- CTA Button – changes text based on variants/availability -->
+              <a href="{{ product.url }}" class="bwps-product-slide__button">
+                {% if product.available %}
+                  {% if product.has_only_default_variant %}
+                    Add to Cart
+                  {% else %}
+                    Select Options
+                  {% endif %}
+                {% else %}
+                  Sold Out
+                {% endif %}
+              </a>
+            </article>
+          {% endfor %}
+        </div>
+        <!-- End of track -->
+
+        <!-- NEXT ARROW BUTTON -->
+        <button
+          class="bwps-slider-arrow bwps-slider-arrow--next"
+          aria-label="Next product"
+          data-next
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <!-- Pagination dots container (populated by JS) -->
+        <div class="bwps-slider-pagination" data-pagination></div>
+      </div>
+      <!-- End of slider -->
+
+    {% else %}
+      <!-- Empty state – helps merchants understand why nothing shows -->
+      <div class="bwps-product-showcase__empty">
+        <p>No products found. Please select a collection in the theme editor.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  /* =============================================================================
+     LAYOUT & BACKGROUND
+     ============================================================================= */
+  .bwps-product-showcase {
+    position: relative;
+    min-height: 70vh;                          /* Full viewport height on desktop */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: {{ section.settings.section_padding_top }}px 20px {{ section.settings.section_padding_bottom }}px;
+    overflow: hidden;
+  }
+
+  /* Dark overlay – improves contrast for white text over images */
+  .bwps-product-showcase::before {
+    content: '';
+    position: absolute;
+    inset: 0; /* shorthand for top/right/bottom/left */
+    background-color: {{ section.settings.overlay_color }};
+    opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    z-index: 1;
+  }
+
+  .bwps-product-showcase__container {
+    position: relative;
+    z-index: 2;
+    max-width: {{ section.settings.container_width }}px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  /* =============================================================================
+     TYPOGRAPHY
+     ============================================================================= */
+  .bwps-product-showcase__title {
+    color: {{section.settings.color_scheme.settings.text}};
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    margin-bottom: 50px;
+    text-align: center;
+    letter-spacing: -0.5px;
+  }
+
+  /* =============================================================================
+     SLIDER CONTAINER
+     ============================================================================= */
+  .bwps-product-slider {
+    position: relative;
+    padding: 0 60px; /* space for arrows */
+  }
+
+  /* Horizontal scrolling track – hidden scrollbar but still accessible */
+  .bwps-product-slider__track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;           /* Firefox */
+    -ms-overflow-style: none;        /* IE/Edge */
+    padding: 10px 0 30px;
+  }
+
+  .bwps-product-slider__track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  /* =============================================================================
+     PRODUCT CARD
+     ============================================================================= */
+  .bwps-product-slide {
+    flex: 0 0 280px;                         /* Fixed width card */
+    background: {{ section.settings.color_scheme_card.settings.background }};
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .bwps-product-slide:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  /* 1:1 image aspect ratio box */
+  .bwps-product-slide__image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    background:{{ section.settings.color_scheme_card.settings.background }};
+  }
+
+  .bwps-product-slide__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .bwps-product-slide:hover .bwps-product-slide__image {
+    transform: scale(1.08); /* Subtle zoom on hover */
+  }
+
+  .bwps-product-slide__title {
+    color: #1a1a1a;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    min-height: 48px; /* Keeps cards aligned when titles vary */
+  }
+
+  .bwps-product-slide__price-wrapper {
+    margin-bottom: 16px;
+  }
+
+  .bwps-product-slide__price {
+    color: #1a1a1a;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .bwps-product-slide__compare-price {
+    color: #999;
+    font-size: 16px;
+    text-decoration: line-through;
+    margin-left: 8px;
+  }
+
+  /* Sale badge positioned in top-right corner of image */
+  .bwps-product-slide__badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #e74c3c;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  /* CTA Button – full width, grows to fill remaining card space */
+  .bwps-product-slide__button {
+    display: block;
+    width: 100%;
+    background: {{ section.settings.button_background }};
+    color: {{ section.settings.button_text_color }};
+    padding: 14px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: 2px solid {{ section.settings.button_background }};
+    margin-top: auto; /* Pushes button to bottom */
+  }
+
+  .bwps-product-slide__button:hover {
+    background: transparent;
+    color: {{ section.settings.button_background }};
+    transform: translateY(-2px);
+  }
+
+  /* =============================================================================
+     NAVIGATION ARROWS
+     ============================================================================= */
+  .bwps-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.95);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 3;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+
+  .bwps-slider-arrow:hover {
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .bwps-slider-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .bwps-slider-arrow--prev { left: 0; }
+  .bwps-slider-arrow--next { right: 0; }
+
+  .bwps-slider-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* =============================================================================
+     PAGINATION DOTS
+     ============================================================================= */
+  .bwps-slider-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 30px;
+  }
+
+  .bwps-slider-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .bwps-slider-dot.active {
+    background: {{ section.settings.color_scheme_card.settings.background }};
+    width: 30px;
+    border-radius: 5px;
+  }
+
+  /* Empty state styling */
+  .bwps-product-showcase__empty {
+    text-align: center;
+    color: {{ section.settings.title_color }};
+    font-size: 18px;
+    padding: 60px 20px;
+  }
+
+  /* =============================================================================
+     RESPONSIVE BREAKPOINTS
+     ============================================================================= */
+  @media (max-width: 1024px) {
+    .bwps-product-slider { padding: 0 50px; }
+    .bwps-product-slide { flex: 0 0 240px; }
+  }
+
+  @media (max-width: 768px) {
+    .bwps-product-showcase {
+      min-height: auto;
+      padding-top: {{ section.settings.section_padding_top | divided_by: 1.5 }}px;
+      padding-bottom: {{ section.settings.section_padding_bottom | divided_by: 1.5 }}px;
+    }
+    .bwps-product-showcase__title { margin-bottom: 30px; }
+    .bwps-product-slider { padding: 0 40px; }
+    .bwps-product-slide { flex: 0 0 220px; padding: 16px; }
+    .bwps-slider-arrow { width: 40px; height: 40px; }
+    .bwps-product-slide__title { font-size: 16px; min-height: auto; }
+    .bwps-product-slide__price { font-size: 18px; }
+  }
+
+  @media (max-width: 480px) {
+    .bwps-product-slider { padding: 0 35px; }
+    .bwps-product-slide { flex: 0 0 200px; }
+    .bwps-slider-arrow { width: 36px; height: 36px; }
+  }
+</style>
+
+<script>
+  // =============================================================================
+  // ENHANCED HORIZONTAL SLIDER WITH ARROWS, PAGINATION & TOUCH SUPPORT
+  // =============================================================================
+  document.addEventListener('DOMContentLoaded', function () {
+    const sliders = document.querySelectorAll('[data-slider]');
+
+    sliders.forEach((slider) => {
+      const track = slider.querySelector('[data-track]');
+      const prevBtn = slider.querySelector('[data-prev]');
+      const nextBtn = slider.querySelector('[data-next]');
+      const pagination = slider.querySelector('[data-pagination]');
+
+      if (!track) return;
+
+      // Get first slide width (including gap) to use as scroll step
+      const slides = track.querySelectorAll('.bwps-product-slide');
+      const slideWidth = slides[0]?.offsetWidth || 300;
+      const gap = 20;
+      const scrollAmount = slideWidth + gap;
+
+      // === PAGINATION DOTS CREATION ===
+      const trackWidth = track.scrollWidth;
+      const visibleWidth = track.offsetWidth;
+      const totalPages = Math.max(1, Math.ceil((trackWidth - visibleWidth) / scrollAmount) + 1);
+
+      if (pagination && totalPages > 1) {
+        for (let i = 0; i < totalPages; i++) {
+          const dot = document.createElement('button');
+          dot.classList.add('bwps-slider-dot');
+          dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          if (i === 0) dot.classList.add('active');
+
+          dot.addEventListener('click', () => {
+            track.scrollLeft = i * scrollAmount;
+          });
+
+          pagination.appendChild(dot);
+        }
+      }
+
+      // === UPDATE ACTIVE DOT & ARROW STATES ON SCROLL ===
+      const updatePagination = () => {
+        if (!pagination) return;
+
+        const dots = pagination.querySelectorAll('.bwps-slider-dot');
+        const currentPage = Math.round(track.scrollLeft / scrollAmount);
+
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === currentPage);
+        });
+
+        // Disable arrows when at start/end
+        if (prevBtn) prevBtn.disabled = track.scrollLeft <= 0;
+        if (nextBtn) nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.offsetWidth - 10;
+      };
+
+      // === ARROW CLICK HANDLERS ===
+      prevBtn?.addEventListener('click', () => {
+        track.scrollLeft -= scrollAmount;
+      });
+
+      nextBtn?.addEventListener('click', () => {
+        track.scrollLeft += scrollAmount;
+      });
+
+      // === SCROLL LISTENER FOR PAGINATION UPDATE ===
+      track.addEventListener('scroll', updatePagination);
+
+      // Initial state
+      updatePagination();
+
+      // === TOUCH / MOUSE DRAG SUPPORT (mobile + desktop) ===
+      let startX = 0;
+      let scrollLeftStart = 0;
+      let isDragging = false;
+
+      track.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - track.offsetLeft;
+        scrollLeftStart = track.scrollLeft;
+        track.style.cursor = 'grabbing';
+      });
+
+      track.addEventListener('mouseleave', () => {
+        isDragging = false;
+      });
+      track.addEventListener('mouseup', () => {
+        isDragging = false;
+        track.style.cursor = 'grab';
+      });
+
+      track.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        const walk = (x - startX) * 2; // multiply by 2 for faster drag
+        track.scrollLeft = scrollLeftStart - walk;
+      });
+
+      // Re-calculate on resize (important when card width changes)
+      window.addEventListener('resize', () => {
+        setTimeout(updatePagination, 100); // small delay for layout recalc
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Background Product Slider",
+  "settings": [
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 1100,
+      "max": 1800,
+      "unit": "px",
+      "step": 10,
+      "label": "Container",
+      "default": 1320
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Face Sunscreen"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Number of Products",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme_card",
+      "label": "Card Color Scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Background Product Slider",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
