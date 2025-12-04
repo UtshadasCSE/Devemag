@@ -60,7 +60,7 @@
       }
     },
     "marquee_slider_FrCYc3": {
-      "type": "marquee-slider",
+      "type": "cus-marquee-slider",
       "blocks": {
         "image_R64HPT": {
           "type": "image",
@@ -148,7 +148,7 @@
       }
     },
     "text_with_carousel_8fhweb": {
-      "type": "text-product-slider",
+      "type": "cus-text-product-slider",
       "name": "Text With Slider",
       "settings": {
         "max_container": 1320,
@@ -165,7 +165,7 @@
       }
     },
     "featured_cards_qRLKnr": {
-      "type": "featured-cards",
+      "type": "cus-featured-cards",
       "blocks": {
         "card_ric83W": {
           "type": "card",
@@ -224,7 +224,7 @@
       }
     },
     "text_icon_image_NJAhMG": {
-      "type": "text-icon-image",
+      "type": "cus-text-icon-image",
       "blocks": {
         "feature_qjLhNw": {
           "type": "feature",
@@ -269,7 +269,7 @@
       }
     },
     "img_carousel_4CePMP": {
-      "type": "img-carousel",
+      "type": "cus-img-carousel",
       "blocks": {
         "slide_bAnnjT": {
           "type": "slide",
@@ -314,7 +314,7 @@
       }
     },
     "icon_category_tab_Cbr7mG": {
-      "type": "icon-category-tab",
+      "type": "cus-icon-category-tab",
       "blocks": {
         "category_tab_THh8Uq": {
           "type": "category_tab",
