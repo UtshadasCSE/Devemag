@@ -438,6 +438,22 @@
         "button_link": "",
         "image": "shopify://shop_images/download_71.png"
       }
+    },
+    "cus_bg_product_slider_cE8gXy": {
+      "type": "cus-bg-product-slider",
+      "name": "Background Product Slider",
+      "settings": {
+        "background_image": "shopify://shop_images/Untitled_design_77.png",
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "title": "Face Sunscreen",
+        "collection": "dress",
+        "products_limit": 8,
+        "section_padding_top": 60,
+        "section_padding_bottom": 60,
+        "color_scheme": "dark",
+        "color_scheme_card": ""
+      }
     }
   },
   "order": [
@@ -449,6 +465,7 @@
     "text_icon_image_NJAhMG",
     "img_carousel_4CePMP",
     "icon_category_tab_Cbr7mG",
-    "cus_features_with_image_9txRXV"
+    "cus_features_with_image_9txRXV",
+    "cus_bg_product_slider_cE8gXy"
   ]
 }
