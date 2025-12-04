@@ -367,6 +367,77 @@
         "shop_all_url": "",
         "color_scheme": ""
       }
+    },
+    "cus_features_with_image_9txRXV": {
+      "type": "cus-features-with-image",
+      "blocks": {
+        "feature_Y3U9Ae": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/quality_1.png",
+            "title": "Full Spectrum Support",
+            "description": "Supports stronger, fuller-looking hair from root to tip."
+          }
+        },
+        "feature_7CnL8Q": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/quality_1.png",
+            "title": "Patented Actives",
+            "description": "Clinically proven ingredients that actually work."
+          }
+        },
+        "feature_WDL7NU": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/delivery_2.png",
+            "title": "Hormone-Safe",
+            "description": "Won’t affect testosterone or cause side effects."
+          }
+        },
+        "feature_m7wH8r": {
+          "type": "feature",
+          "settings": {
+            "icon_image": "shopify://shop_images/delivery_2.png",
+            "title": "No Residue",
+            "description": "Clean formula, zero greasiness or flaking."
+          }
+        },
+        "benefit_YEmb6P": {
+          "type": "benefit",
+          "settings": {
+            "icon_image": "shopify://shop_images/secure_2.png",
+            "text": "2–5 Day Delivery"
+          }
+        },
+        "benefit_pKVzza": {
+          "type": "benefit",
+          "settings": {
+            "icon_image": "shopify://shop_images/secure_2.png",
+            "text": "60-Day Money Back Guarantee"
+          }
+        }
+      },
+      "block_order": [
+        "feature_Y3U9Ae",
+        "feature_7CnL8Q",
+        "feature_WDL7NU",
+        "feature_m7wH8r",
+        "benefit_YEmb6P",
+        "benefit_pKVzza"
+      ],
+      "name": "Features with Image",
+      "settings": {
+        "max_container": 1320,
+        "padding_top": 80,
+        "padding_bottom": 80,
+        "color_scheme": "footer",
+        "heading": "Because confidence starts here",
+        "subheading": "Over 900,000+ men have already made the switch.",
+        "button_text": "MAKE THE SWITCH NOW",
+        "button_link": "",
+        "image": "shopify://shop_images/download_71.png"
+      }
     }
   },
   "order": [
@@ -377,6 +448,7 @@
     "featured_cards_qRLKnr",
     "text_icon_image_NJAhMG",
     "img_carousel_4CePMP",
-    "icon_category_tab_Cbr7mG"
+    "icon_category_tab_Cbr7mG",
+    "cus_features_with_image_9txRXV"
   ]
 }
