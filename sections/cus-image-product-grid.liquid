@@ -1,0 +1,549 @@
+<!--
+  ====================================
+  SECTION MARKUP - Main HTML structure
+  ====================================
+-->
+<section style="background:{{ section.settings.color_scheme.settings.background }};">
+  <div class="icg-featured-grid">
+    <!-- Section Header -->
+    <div class="icg-featured-grid__header">
+      <div class="icg-featured-grid__subtitle">{{ section.settings.subtitle }}</div>
+      <h2 class="icg-featured-grid__title">{{ section.settings.title }}</h2>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="icg-featured-grid__content">
+      <!-- Featured Image Card (Left Side) -->
+      <div class="icg-featured-grid__feature">
+        {% if section.settings.feature_image %}
+          {{
+            section.settings.feature_image
+            | image_url: width: 800
+            | image_tag: class: 'icg-featured-grid__feature-image', loading: 'lazy', alt: section.settings.feature_title
+          }}
+        {% endif %}
+
+        <div class="icg-featured-grid__feature-content">
+          <div class="icg-featured-grid__feature-tag">{{ section.settings.feature_tag }}</div>
+          <h3 class="icg-featured-grid__feature-title">{{ section.settings.feature_title }}</h3>
+          <p class="icg-featured-grid__feature-description">{{ section.settings.feature_description }}</p>
+
+          {% if section.settings.button_link %}
+            <a href="{{ section.settings.button_link }}" class="icg-featured-grid__button">
+              {{ section.settings.button_text }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Product Grid (Right Side) -->
+      <div class="icg-featured-grid__products">
+        {% assign collection = collections[section.settings.featured_collection] %}
+        {% for product in collection.products limit: 4 %}
+          <div class="icg-product-card">
+            <!-- Product Image -->
+            <div class="icg-product-card__image-wrapper">
+              <a href="{{ product.url }}" aria-label="View {{ product.title }}">
+                {{
+                  product.featured_image
+                  | image_url: width: 400
+                  | image_tag: class: 'icg-product-card__image', loading: 'lazy', alt: product.title
+                }}
+              </a>
+            </div>
+
+            <!-- Product Details -->
+            <div class="icg-product-card__content">
+              <div class="icg-product-card__vendor">{{ product.vendor }}</div>
+              <a href="{{ product.url }}" class="icg-product-card__title">{{ product.title }}</a>
+              <div class="icg-product-card__price">
+                {{ product.price | money }}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ====================================
+     MAIN CONTAINER - Full width responsive wrapper
+     ==================================== */
+  .icg-featured-grid {
+    margin: 0 auto;
+    padding-top: {{ section.settings.section_padding_top }}px;
+    padding-bottom: {{ section.settings.section_padding_bottom }}px;
+    max-width: {{ section.settings.container_width }}px;
+
+    color: {{ section.settings.color_scheme.settings.text }};
+
+  }
+
+  /* ====================================
+     HEADER SECTION - Section title and subtitle
+     ==================================== */
+  .icg-featured-grid__header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: icg-fadeIn 0.6s ease-in;
+  }
+
+  .icg-featured-grid__subtitle {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    color: {{ section.settings.color_scheme.settings.subtext }};
+    font-weight: 600;
+  }
+
+  .icg-featured-grid__title {
+    font-size: clamp(28px, 5vw, 42px);
+    color: {{ section.settings.color_scheme.settings.text }};
+    margin: 0;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  /* ====================================
+     GRID LAYOUT - Two column responsive grid
+     ==================================== */
+  .icg-featured-grid__content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+  }
+
+  /* ====================================
+     FEATURE IMAGE CARD - Large promotional image with overlay
+     ==================================== */
+  .icg-featured-grid__feature {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+    min-height: 400px;
+  }
+
+  .icg-featured-grid__feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .icg-featured-grid__feature-image {
+    width: 100%;
+    height: 100%;
+    min-height: 400px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .icg-featured-grid__feature:hover .icg-featured-grid__feature-image {
+    transform: scale(1.05);
+  }
+
+  /* Overlay gradient for better text readability */
+  .icg-featured-grid__feature::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    pointer-events: none;
+  }
+
+  /* ====================================
+     FEATURE CONTENT - Text overlay on feature image
+     ==================================== */
+  .icg-featured-grid__feature-content {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    right: 30px;
+    color: {{ section.settings.content_color_scheme.settings.subtext }};
+    z-index: 2;
+  }
+
+  .icg-featured-grid__feature-tag {
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+
+  .icg-featured-grid__feature-title {
+    font-size: clamp(24px, 4vw, 36px);
+    margin: 0 0 12px;
+    color: {{ section.settings.content_color_scheme.settings.text }};
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .icg-featured-grid__feature-description {
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+    opacity: 0.95;
+  }
+
+  /* ====================================
+     CTA BUTTON - Primary action button
+     ==================================== */
+  .icg-featured-grid__button {
+    display: inline-block;
+    padding: 14px 32px;
+    background: {{ section.settings.content_color_scheme.settings.button }};
+    color: {{ section.settings.content_color_scheme.settings.button_label }};
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+  }
+
+  .icg-featured-grid__button:hover {
+    background: #e31837;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(227, 24, 55, 0.4);
+  }
+
+  /* ====================================
+     PRODUCT GRID - 2x2 grid for product cards
+     ==================================== */
+  .icg-featured-grid__products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    height: 100%;
+  }
+
+  /* ====================================
+     PRODUCT CARD - Individual product display
+     ==================================== */
+  .icg-product-card {
+    position: relative;
+    background: {{ section.settings.card_color_scheme.settings.background }};
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .icg-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  /* Product image with hover zoom effect */
+  .icg-product-card__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: #f5f5f5;
+  }
+
+  .icg-product-card__image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .icg-product-card:hover .icg-product-card__image {
+    transform: scale(1.08);
+  }
+
+  /* ====================================
+     PRODUCT INFORMATION - Title, vendor, price
+     ==================================== */
+  .icg-product-card__content {
+    padding: 16px;
+  }
+
+  .icg-product-card__vendor {
+    font-size: 11px;
+    color: {{ section.settings.card_color_scheme.settings.subtext }};
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .icg-product-card__title {
+    margin: 0 0 8px;
+    font-size: 15px;
+    color: {{ section.settings.card_color_scheme.settings.text }};
+    text-decoration: none;
+    display: block;
+    font-weight: 600;
+    line-height: 1.3;
+    transition: color 0.3s ease;
+  }
+
+  .icg-product-card__price {
+    font-weight: 700;
+    font-size: 16px;
+    color: {{ section.settings.card_color_scheme.settings.subtext }};
+  }
+
+  /* ====================================
+     ANIMATIONS - Smooth entrance effects
+     ==================================== */
+  @keyframes icg-fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ====================================
+     TABLET RESPONSIVE (768px - 1024px)
+     ==================================== */
+  @media screen and (max-width: 1024px) {
+    .icg-featured-grid {
+      padding: 50px 16px;
+    }
+
+    .icg-featured-grid__content {
+      gap: 24px;
+    }
+
+    .icg-featured-grid__feature-content {
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+    }
+  }
+
+  /* ====================================
+     MOBILE RESPONSIVE (Below 768px)
+     ==================================== */
+  @media screen and (max-width: 768px) {
+    .icg-featured-grid {
+      padding: 40px 16px;
+    }
+
+    /* Stack feature and products vertically */
+    .icg-featured-grid__content {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .icg-featured-grid__header {
+      margin-bottom: 30px;
+    }
+
+    /* Adjust feature card for mobile */
+    .icg-featured-grid__feature {
+      min-height: 350px;
+    }
+
+    .icg-featured-grid__feature-content {
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+    }
+
+    .icg-featured-grid__feature-title {
+      font-size: 24px;
+    }
+
+    .icg-featured-grid__button {
+      padding: 12px 24px;
+      font-size: 13px;
+    }
+
+    /* Single column product grid on mobile */
+    .icg-featured-grid__products {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .icg-product-card__content {
+      padding: 14px;
+    }
+  }
+
+  /* ====================================
+     SMALL MOBILE (Below 480px)
+     ==================================== */
+  @media screen and (max-width: 480px) {
+    .icg-featured-grid {
+      padding: 30px 12px;
+    }
+
+    .icg-featured-grid__subtitle {
+      font-size: 12px;
+    }
+
+    .icg-featured-grid__feature {
+      min-height: 300px;
+    }
+
+    .icg-featured-grid__feature-content {
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+    }
+
+    .icg-featured-grid__feature-tag {
+      font-size: 11px;
+    }
+
+    .icg-featured-grid__button {
+      width: 100%;
+      text-align: center;
+    }
+
+    .icg-product-card__wishlist {
+      width: 32px;
+      height: 32px;
+      font-size: 16px;
+    }
+  }
+
+  /* ====================================
+     ACCESSIBILITY - Reduced motion preference
+     ==================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .icg-featured-grid__feature,
+    .icg-product-card,
+    .icg-product-card__image,
+    .icg-featured-grid__feature-image,
+    .icg-featured-grid__button {
+      transition: none;
+      animation: none;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Collection Grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 1100,
+      "max": 1800,
+      "unit": "px",
+      "step": 10,
+      "label": "Container",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom Padding",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "CLASSIC COLLECTION"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Timeless Designs For Every Cowboy"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_image",
+      "label": "Feature Image"
+    },
+    {
+      "type": "text",
+      "id": "feature_tag",
+      "label": "Subheading",
+      "default": "RODEO READY"
+    },
+    {
+      "type": "text",
+      "id": "feature_title",
+      "label": "Heading",
+      "default": "Performance And Style Combined"
+    },
+    {
+      "type": "text",
+      "id": "feature_description",
+      "label": "Description",
+      "default": "Get ready to shine in the arena with our Rodeo Ready collection."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "collection",
+      "id": "featured_collection",
+      "label": "Collection"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card Color Scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "color_scheme",
+      "id": "content_color_scheme",
+      "label": "Content Color Scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Collection Grid",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
