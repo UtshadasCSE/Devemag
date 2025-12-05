@@ -443,6 +443,7 @@
       "type": "cus-bg-product-slider",
       "name": "Background Product Slider",
       "settings": {
+        "container_width": 1320,
         "background_image": "shopify://shop_images/Untitled_design_77.png",
         "overlay_color": "#000000",
         "overlay_opacity": 40,
@@ -453,6 +454,27 @@
         "section_padding_bottom": 60,
         "color_scheme": "dark",
         "color_scheme_card": ""
+      }
+    },
+    "cus_image_product_grid_yGFkmx": {
+      "type": "cus-image-product-grid",
+      "name": "Image Collection Grid",
+      "settings": {
+        "container_width": 1320,
+        "section_padding_top": 60,
+        "section_padding_bottom": 60,
+        "subtitle": "CLASSIC COLLECTION",
+        "title": "Timeless Designs For Every Cowboy",
+        "feature_image": "shopify://shop_images/download_74.png",
+        "feature_tag": "RODEO READY",
+        "feature_title": "Performance And Style Combined",
+        "feature_description": "Get ready to shine in the arena with our Rodeo Ready collection.",
+        "button_text": "Shop Now",
+        "button_link": "shopify://products/mahal-baklava-embroidered-panjabi",
+        "featured_collection": "shoes",
+        "color_scheme": "default",
+        "card_color_scheme": "footer",
+        "content_color_scheme": "dark"
       }
     }
   },
@@ -466,6 +488,7 @@
     "img_carousel_4CePMP",
     "icon_category_tab_Cbr7mG",
     "cus_features_with_image_9txRXV",
-    "cus_bg_product_slider_cE8gXy"
+    "cus_bg_product_slider_cE8gXy",
+    "cus_image_product_grid_yGFkmx"
   ]
 }
