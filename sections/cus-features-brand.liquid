@@ -1,0 +1,143 @@
+<div class="page-width">
+  <div class="as-seen-in">
+    {% if section.settings.title != blank %}
+      <h2 class="as-seen-in__title">
+        {{ section.settings.title }}
+      </h2>
+    {% endif %}
+
+    {% if section.blocks.size > 0 %}
+      <div class="as-seen-in__grid">
+        {% for block in section.blocks %}
+          <div class="as-seen-in__item" {{ block.shopify_attributes }}>
+            {% if block.settings.brand_image != blank %}
+              {%- assign img_url = block.settings.brand_image | img_url: '300x' -%}
+              <img
+                src="{{ img_url }}"
+                alt="{{ block.settings.brand_name }}"
+                loading="lazy"
+                width="{{ block.settings.brand_image.width }}"
+                height="{{ block.settings.brand_image.height }}"
+              >
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% style %}
+  .as-seen-in {
+    text-align: center;
+    padding: 60px 0;
+  }
+
+  .as-seen-in__title {
+    color: {{ section.settings.title_color }};
+    font-size: 32px;
+    margin-bottom: 40px;
+    font-weight: 400;
+  }
+
+  .as-seen-in__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: center;
+    justify-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .as-seen-in__item {
+    padding: 15px;
+  }
+
+  .as-seen-in__item img {
+    max-width: 100%;
+    height: auto;
+    max-height: 60px;
+    width: auto;
+  }
+
+  @media screen and (max-width: 749px) {
+    .as-seen-in {
+      padding: 40px 0;
+    }
+
+    .as-seen-in__title {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .as-seen-in__item img {
+      max-height: 40px;
+    }
+  }
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "Featured Brands",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "As Seen In..."
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#FF69B4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "brand_image",
+          "label": "Brand Logo"
+        },
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name",
+          "info": "Used for image alt text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Brands",
+      "category": "Custom",
+      "blocks": [
+        {
+          "type": "brand"
+        },
+        {
+          "type": "brand"
+        },
+        {
+          "type": "brand"
+        },
+        {
+          "type": "brand"
+        },
+        {
+          "type": "brand"
+        },
+        {
+          "type": "brand"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

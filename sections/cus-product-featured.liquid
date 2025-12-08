@@ -1,0 +1,430 @@
+<section class="pfs-featured-showcase">
+  <div class="pfs-showcase-container">
+    <!-- Left Content -->
+    <div class="pfs-showcase-content">
+      <h2 class="pfs-showcase-title">{{ section.settings.title }}</h2>
+      <p class="pfs-showcase-description">{{ section.settings.description }}</p>
+      <a href="{{ section.settings.button_link }}" class="pfs-showcase-button">
+        {{ section.settings.button_label }}
+      </a>
+    </div>
+
+    <!-- Center Image -->
+    <div>
+      {% if section.settings.showcase_image %}
+        <img
+          src="{{ section.settings.showcase_image | image_url: width: 600 }}"
+          alt="{{ section.settings.title }}"
+          class="pfs-showcase-image"
+          loading="lazy"
+          width="200"
+          height="300"
+        >
+      {% else %}
+        <div style="background: #f0f0f0; height: 500px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">
+          <p>Add an image</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Right Feature Cards -->
+    <div class="pfs-feature-cards">
+      {% for i in (1..3) %}
+        {%- assign card_icon_key = 'card_' | append: i | append: '_icon' -%}
+        {%- assign card_title_key = 'card_' | append: i | append: '_title' -%}
+        {%- assign card_text_key = 'card_' | append: i | append: '_text' -%}
+        <div class="pfs-feature-card">
+          <div class="pfs-feature-icon">
+            {{ section.settings[card_icon_key] }}
+          </div>
+          <h3 class="pfs-feature-card-title">{{ section.settings[card_title_key] }}</h3>
+          <p class="pfs-feature-card-text">{{ section.settings[card_text_key] }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pfs-featured-showcase {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+    background-color: {{ section.settings.color_scheme.settings.background }};
+  }
+
+  .pfs-showcase-container {
+    max-width: {{ section.settings.container_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .pfs-showcase-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .pfs-showcase-title {
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.2;
+    color: {{ section.settings.color_scheme.settings.text}};
+    margin: 0;
+  }
+
+  .pfs-showcase-description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: {{ section.settings.color_scheme.settings.subtext }};
+  }
+
+  .pfs-showcase-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background-color: {{ section.settings.color_scheme.settings.button }};
+    color: {{ section.settings.color_scheme.settings.button_label}};
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 4px;
+    width: fit-content;
+    transition: all 0.3s ease;
+    border: 2px solid {{ section.settings.color_scheme.settings.button }};
+  }
+
+  .pfs-showcase-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .pfs-showcase-image {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .pfs-feature-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .pfs-feature-card {
+    text-align: center;
+    padding: 30px;
+    background-color: {{ section.settings.card_color_scheme.settings.background }};
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .pfs-feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    border-color: {{ section.settings.card_border_color }};
+  }
+
+  .pfs-feature-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+
+  .pfs-feature-card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: {{ section.settings.card_color_scheme.settings.text }};
+    margin: 0 0 10px 0;
+  }
+
+  .pfs-feature-card-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: {{ section.settings.card_color_scheme.settings.subtext }};
+    margin: 0;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .pfs-showcase-container {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+
+    .pfs-showcase-title {
+      font-size: 36px;
+    }
+
+    .pfs-showcase-image {
+      height: 400px;
+      order: 2;
+    }
+
+    .pfs-showcase-content {
+      order: 1;
+    }
+
+    .pfs-feature-cards {
+      order: 3;
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .pfs-feature-card {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .pfs-featured-showcase {
+      padding: {{ section.settings.padding_top | times: 0.75 }}px 0 {{ section.settings.padding_bottom | times: 0.75 }}px 0;
+    }
+
+    .pfs-showcase-container {
+      gap: 20px;
+      padding: 0 15px;
+    }
+
+    .pfs-showcase-title {
+      font-size: 28px;
+    }
+
+    .pfs-showcase-description {
+      font-size: 14px;
+    }
+
+    .pfs-showcase-image {
+      height:  height: 300px;
+    }
+
+    .pfs-feature-cards {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .pfs-feature-card {
+      padding: 20px;
+    }
+
+    .pfs-feature-card-title {
+      font-size: 16px;
+    }
+
+    .pfs-feature-card-text {
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .pfs-showcase-container {
+      padding: 0 12px;
+    }
+
+    .pfs-showcase-title {
+      font-size: 24px;
+    }
+
+    .pfs-showcase-description {
+      font-size: 13px;
+    }
+
+    .pfs-showcase-button {
+      padding: 10px 24px;
+      font-size: 14px;
+    }
+
+    .pfs-showcase-image {
+      height: 250px;
+    }
+
+    .pfs-feature-icon {
+      width: 40px;
+      height: 40px;
+      font-size: 28px;
+    }
+
+    .pfs-feature-card {
+      padding: 16px;
+    }
+
+    .pfs-feature-card-title {
+      font-size: 14px;
+    }
+
+    .pfs-feature-card-text {
+      font-size: 12px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Featured Product Showcase",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout Settings"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "min": 1100,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "label": "Container",
+      "default": 1320
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 60
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 60
+    },
+
+    {
+      "type": "header",
+      "content": "Content Settings"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "DURABLE ABRASIVE DISCS"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "3M™ Cubitron™ II Fibre Discs: Durable, precise, and efficient for weld removal, edge chamfering, and surface blending. Built for professionals."
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "image_picker",
+      "id": "showcase_image",
+      "label": "Featured Image"
+    },
+    {
+      "type": "header",
+      "content": "Color Scheme"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "color_scheme",
+      "id": "card_color_scheme",
+      "label": "Card Color Scheme",
+      "default": "scheme-2"
+    },
+
+    {
+      "type": "header",
+      "content": "Card 1"
+    },
+    {
+      "type": "text",
+      "id": "card_1_icon",
+      "label": "Card Icon (Emoji or Unicode)",
+      "default": "Settings"
+    },
+    {
+      "type": "text",
+      "id": "card_1_title",
+      "label": "Heading",
+      "default": "Natural"
+    },
+    {
+      "type": "textarea",
+      "id": "card_1_text",
+      "label": "Description",
+      "default": "Compliment interested discretion estimating."
+    },
+    {
+      "type": "header",
+      "content": "Card 2"
+    },
+    {
+      "type": "text",
+      "id": "card_2_icon",
+      "label": "Card Icon (Emoji or Unicode)",
+      "default": "Saw"
+    },
+    {
+      "type": "text",
+      "id": "card_2_title",
+      "label": "Heading",
+      "default": "Natural"
+    },
+    {
+      "type": "textarea",
+      "id": "card_2_text",
+      "label": "Description",
+      "default": "Compliment interested discretion estimating."
+    },
+    {
+      "type": "header",
+      "content": "Card 3"
+    },
+    {
+      "type": "text",
+      "id": "card_3_icon",
+      "label": "Card Icon (Emoji or Unicode)",
+      "default": "Briefcase"
+    },
+    {
+      "type": "text",
+      "id": "card_3_title",
+      "label": "Heading",
+      "default": "100% Organic"
+    },
+    {
+      "type": "textarea",
+      "id": "card_3_text",
+      "label": "Description",
+      "default": "Never at water me might. On formed merits hunted."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Product Showcase",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
