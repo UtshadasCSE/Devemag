@@ -1,0 +1,40 @@
+{% if settings.enable_top_loading_bar %}
+  <style>
+    .scroll-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 6px;
+      width: 0%;
+      z-index: 999999;
+      background: linear-gradient(90deg, #ffffff, #000000, #ffffff, #000000);
+      background-size: 300%;
+      animation: gradientMove 3s linear infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0%;
+      }
+      100% {
+        background-position: 300%;
+      }
+    }
+  </style>
+
+  <div class="scroll-progress-bar"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const progressBar = document.querySelector('.scroll-progress-bar');
+
+      window.addEventListener('scroll', function () {
+        const scrollTop = window.scrollY;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+
+        progressBar.style.width = scrollPercent + '%';
+      });
+    });
+  </script>
+{% endif %}

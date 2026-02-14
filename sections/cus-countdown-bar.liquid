@@ -1,0 +1,332 @@
+<div class="countdown-sale-bar" id="countdownBar-{{ section.id }}">
+  <div class="countdown-container">
+    <div class="countdown-sale-text">
+      <h4>{{ section.settings.countdown_text }}</h4>
+    </div>
+
+    <div class="countdown-wrapper">
+      <div class="countdown-time-box">
+        <div class="countdown-time" data-hours>00</div>
+        <div class="countdown-label">Hours</div>
+      </div>
+      <div class="countdown-time-box">
+        <div class="countdown-time" data-minutes>00</div>
+        <div class="countdown-label">Min</div>
+      </div>
+      <div class="countdown-time-box">
+        <div class="countdown-time" data-seconds>00</div>
+        <div class="countdown-label">Sec</div>
+      </div>
+    </div>
+
+    {% if section.settings.button_label != blank %}
+      <a href="{{ section.settings.button_link }}" class="countdown-btn">
+        {{ section.settings.button_label }}
+      </a>
+    {% endif %}
+
+    <button class="countdown-close-btn" data-close>✕</button>
+  </div>
+</div>
+
+{% comment %} CSS CODE  {% endcomment %}
+<style>
+  .countdown-sale-bar {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: {{ section.settings.color_scheme.settings.background }};
+    color: {{ section.settings.color_scheme.settings.text }};
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .countdown-container {
+    max-width: {{ section.settings.max_container }}px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+  }
+
+  /* Text */
+  .countdown-sale-text h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: {{ section.settings.color_scheme.settings.text }};
+  }
+
+  /* Timer */
+  .countdown-wrapper {
+    display: flex;
+    gap: 8px;
+  }
+
+  .countdown-time-box {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 6px 10px;
+    text-align: center;
+    min-width: 55px;
+  }
+
+  .countdown-time {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .countdown-label {
+    font-size: 10px;
+    opacity: 0.8;
+    margin-top: 3px;
+    text-transform: uppercase;
+  }
+
+  /* Button */
+  .countdown-btn {
+    background: {{ section.settings.color_scheme.settings.button }};
+    color: {{ section.settings.color_scheme.settings.button_label }};
+    padding: 8px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+
+  .countdown-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  /* Close Button */
+  .countdown-close-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: {{ section.settings.text_color }};
+    font-size: 20px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .countdown-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Hide scrollbar */
+  .countdown-sale-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .countdown-sale-bar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* MOBILE - Single row, hide button */
+  @media (max-width: 768px) {
+    .countdown-sale-bar {
+      padding: {{ section.settings.padding_top }}px 10px {{ section.settings.padding_bottom }}px;
+      overflow-x: auto;
+    }
+
+    .countdown-container {
+      gap: 10px;
+      min-width: max-content;
+    }
+
+    .countdown-sale-text h4 {
+      font-size: 10px;
+    }
+
+    .countdown-wrapper {
+      gap: 6px;
+    }
+
+    .countdown-time-box {
+      min-width: 42px;
+      padding: 4px 6px;
+    }
+
+    .countdown-time {
+      font-size: 10px;
+    }
+
+    .countdown-label {
+      font-size: 6px;
+    }
+
+    .countdown-close-btn {
+      width: 24px;
+      height: 24px;
+      font-size: 16px;
+    }
+
+    /* Hide button on mobile */
+    .countdown-btn {
+      display: none;
+    }
+  }
+</style>
+
+{% comment %} JS Code  {% endcomment %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    const sectionId = "{{ section.id }}";
+    const bar = document.getElementById("countdownBar-" + sectionId);
+    if (!bar) return;
+
+    const STORAGE_KEY = "countdown_end_" + sectionId;
+    const CLOSED_KEY = "countdown_closed_" + sectionId;
+
+    const SALE_DURATION = {{ section.settings.countdown_hours | times: 3600000 }};
+
+    const hoursEl = bar.querySelector("[data-hours]");
+    const minutesEl = bar.querySelector("[data-minutes]");
+    const secondsEl = bar.querySelector("[data-seconds]");
+    const closeBtn = bar.querySelector("[data-close]");
+
+    // Check if user already closed the banner
+    if (localStorage.getItem(CLOSED_KEY) === "true") {
+      bar.style.display = "none";
+      return;
+    }
+
+    // Close button functionality
+    closeBtn.addEventListener("click", function () {
+      bar.style.display = "none";
+      localStorage.setItem(CLOSED_KEY, "true");
+    });
+
+    // Get or set countdown end time
+    let endTime = localStorage.getItem(STORAGE_KEY);
+
+    if (!endTime) {
+      endTime = Date.now() + SALE_DURATION;
+      localStorage.setItem(STORAGE_KEY, endTime);
+    }
+
+    endTime = parseInt(endTime);
+
+    // Update countdown function
+    function updateCountdown() {
+      const now = Date.now();
+      let timeLeft = endTime - now;
+
+      if (timeLeft <= 0) {
+        localStorage.removeItem(STORAGE_KEY);
+        bar.style.display = "none";
+        return;
+      }
+
+      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      hoursEl.textContent = String(hours).padStart(2, "0");
+      minutesEl.textContent = String(minutes).padStart(2, "0");
+      secondsEl.textContent = String(seconds).padStart(2, "0");
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Countdown Sale",
+  "settings": [
+    {
+      "type": "range",
+      "id": "max_container",
+      "min": 1100,
+      "max": 1800,
+      "step": 10,
+      "unit": "px",
+      "label": "Container",
+      "default": 1320
+    },
+
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "countdown_text",
+      "label": "Heading",
+      "default": "🔥 24 Hour Flash Sale — Ends Soon!"
+    },
+    {
+      "type": "range",
+      "id": "countdown_hours",
+      "min": 2,
+      "max": 168,
+      "step": 2,
+      "unit": "h",
+      "label": "Countdown Duration (Hours)",
+      "default": 24
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown Sale",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

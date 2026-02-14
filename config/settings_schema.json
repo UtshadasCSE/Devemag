@@ -64,6 +64,12 @@
         "label": "Languages support RTL",
         "default": "he,ar",
         "info": "Enter ISO language code, separate by comma. Leave blank to enable for all languages. [Check ISO language code](https://www.loc.gov/standards/iso639-2/php/code_list.php)"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_top_loading_bar",
+        "label": "Enable Top Loading",
+        "default": false
       }
     ]
   },
@@ -108,7 +114,7 @@
         "max": 150,
         "step": 5,
         "unit": "px"
-      }
+      },
     ]
   },
   {
