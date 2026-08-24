@@ -15,11 +15,11 @@
             assign tag_name = tag_content | split: '_' | last
             assign color_scheme_class = 'm-color-'
             case type
-                when 'sale':
+                when 'sale'
                     assign color_scheme_class = color_scheme_class | append: settings.sale_badge_color_scheme
-                when 'new':
+                when 'new'
                     assign color_scheme_class = color_scheme_class | append: settings.new_badge_color_scheme
-                when 'hot':
+                when 'hot'
                     assign color_scheme_class = color_scheme_class | append: settings.hot_badge_color_scheme
             endcase
         -%}
@@ -28,3 +28,19 @@
         </span>
     {% endif %}
 {% endfor %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "                when 'sale':"
+  to: "                when 'sale'"
+  position: 582..609
+- from: "                when 'new':"
+  to: "                when 'new'"
+  position: 720..746
+- from: "                when 'hot':"
+  to: "                when 'hot'"
+  position: 856..882
+{% endcomment %}

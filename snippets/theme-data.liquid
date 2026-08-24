@@ -66,7 +66,7 @@ window.MinimogStrings = {
   unitPrice: {{ 'products.product.unit_price_label' | t | json }},
   unitPriceSeparator: {{ 'general.accessibility.unit_price_separator' | t | json }},
   cartError: "{% render 'new-locale', key: 'cart.general.cart_error' %}",
-  quantityError: "{{ 'products.product.not_enough_items_message' | t: quantity: '{{ quantity }}' }}",
+  quantityError: "{{ 'products.product.not_enough_items_message' | t: quantity | quantity }}' }}",
   selectVariant: "{% render 'new-locale', key: 'products.product.select_variant' %}",
   valideDateTimeDelivery: "{% render 'new-locale', key: 'cart.general.delivery_error' %}"
 };
@@ -176,3 +176,14 @@ window.MinimogSettings = {
 
   __setSwatchesOptions();
 </script>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ 'products.product.not_enough_items_message' | t: quantity: '{{ quantity
+    }}"
+  to: "{{ 'products.product.not_enough_items_message' | t: quantity | quantity }}"
+  position: 2913..2987
+{% endcomment %}
